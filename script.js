@@ -147,7 +147,7 @@ skinSearch.addEventListener('input', function() {
         // Prüfe name, weapon.name, pattern.name
         const fields = [skin.name, skin.weapon?.name, skin.pattern?.name].filter(Boolean).map(s => s.toLowerCase());
         return words.every(w => fields.some(f => f.includes(w)));
-    }).slice(0, 20);
+    }); // Kein .slice(0, 20) mehr, alle anzeigen
     if (matches.length === 0) {
         skinSuggestions.style.display = 'none';
         return;

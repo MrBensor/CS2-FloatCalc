@@ -1,64 +1,87 @@
-// Tab logic
+// --- TAB LOGIC ---
 const tabFloat = document.getElementById('tabFloat');
 const tabAvg = document.getElementById('tabAvg');
 const tabContentFloat = document.getElementById('tabContentFloat');
 const tabContentAvg = document.getElementById('tabContentAvg');
-document.getElementById('tabFloat').addEventListener('click', function() {
-    document.getElementById('tabContentFloat').style.display = '';
-    document.getElementById('tabContentAvg').style.display = 'none';
-    this.classList.add('active');
-    document.getElementById('tabAvg').classList.remove('active');
-});
-document.getElementById('tabAvg').addEventListener('click', function() {
-    document.getElementById('tabContentFloat').style.display = 'none';
-    document.getElementById('tabContentAvg').style.display = '';
-    this.classList.add('active');
-    document.getElementById('tabFloat').classList.remove('active');
+
+tabFloat.addEventListener('click', () => {
+    tabContentFloat.style.display = '';
+    tabContentAvg.style.display = 'none';
+    tabFloat.classList.add('active');
+    tabAvg.classList.remove('active');
 });
 
-// Generate float input fields and show wear rating
+tabAvg.addEventListener('click', () => {
+    tabContentFloat.style.display = 'none';
+    tabContentAvg.style.display = '';
+    tabAvg.classList.add('active');
+    tabFloat.classList.remove('active');
+});
+
+// --- FLOAT INPUTS & WEAR LABELS ---
 const floatInputsDiv = document.getElementById('floatInputs');
+
 function getWearRatingShort(floatVal) {
     if (floatVal < 0.07) return 'FN';
     if (floatVal < 0.15) return 'MW';
     if (floatVal < 0.38) return 'FT';
     if (floatVal < 0.45) return 'WW';
-    if (floatVal <= 1.00) return 'BS';
+    if (floatVal <= 1.0) return 'BS';
     return '';
 }
-// Generate float inputs with wear label next to them
-for (let i = 1; i <= 10; i++) {
-    const wrapper = document.createElement('div');
-    wrapper.style.display = 'flex';
-    wrapper.style.alignItems = 'center';
-    wrapper.style.gap = '8px';
-    const input = document.createElement('input');
-    input.type = 'number';
-    input.step = 'any';
-    input.id = `float${i}`;
-    input.placeholder = `Float ${i}`;
-    input.style.flex = '1';
-    const label = document.createElement('span');
-    label.id = `wearLabel${i}`;
-    label.style.minWidth = '38px';
-    label.style.fontWeight = 'bold';
-    label.style.color = '#43b581';
-    input.addEventListener('input', function() {
-        const val = parseFloat(input.value);
-        label.textContent = !isNaN(val) ? '= ' + getWearRatingShort(val) : '';
-    });
-    wrapper.appendChild(input);
-    wrapper.appendChild(label);
-    floatInputsDiv.appendChild(wrapper);
-}
-// Show initially
-for (let i = 1; i <= 10; i++) {
-    document.getElementById(`wearLabel${i}`).textContent = '';
+
+function getWearRating(floatVal, lang = 'en') {
+    const wearEn = ['Factory New', 'Minimal Wear', 'Field-Tested', 'Well-Worn', 'Battle-Scarred'];
+    const wearDe = ['Fabrikneu', 'Minimale Gebrauchsspuren', 'Einsatzerprobt', 'Abgenutzt', 'Kampfspuren'];
+    const wear = lang === 'de' ? wearDe : wearEn;
+
+    if (floatVal >= 0 && floatVal < 0.07) return wear[0];
+    if (floatVal >= 0.07 && floatVal < 0.15) return wear[1];
+    if (floatVal >= 0.15 && floatVal < 0.38) return wear[2];
+    if (floatVal >= 0.38 && floatVal < 0.45) return wear[3];
+    if (floatVal >= 0.45 && floatVal <= 1.0) return wear[4];
+    return '';
 }
 
-// Calculate average
+// Generate float input fields
+function createFloatInputs() {
+    floatInputsDiv.innerHTML = '';
+    for (let i = 1; i <= 10; i++) {
+        const wrapper = document.createElement('div');
+        wrapper.style.display = 'flex';
+        wrapper.style.alignItems = 'center';
+        wrapper.style.gap = '8px';
+
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.step = 'any';
+        input.id = `float${i}`;
+        input.placeholder = `Float ${i}`;
+        input.style.flex = '1';
+
+        const label = document.createElement('span');
+        label.id = `wearLabel${i}`;
+        label.style.minWidth = '38px';
+        label.style.fontWeight = 'bold';
+        label.style.color = '#43b581';
+
+        // Show =FN / =MW etc. immediately
+        input.addEventListener('input', () => {
+            const val = parseFloat(input.value);
+            label.textContent = !isNaN(val) ? '= ' + getWearRatingShort(val) : '';
+        });
+
+        wrapper.appendChild(input);
+        wrapper.appendChild(label);
+        floatInputsDiv.appendChild(wrapper);
+    }
+}
+createFloatInputs();
+
+// --- CALCULATE AVERAGE ---
 let avgFloat = null;
-document.getElementById('calcAvgBtn').addEventListener('click', function() {
+
+document.getElementById('calcAvgBtn').addEventListener('click', () => {
     let sum = 0;
     let count = 0;
     for (let i = 1; i <= 10; i++) {
@@ -70,45 +93,32 @@ document.getElementById('calcAvgBtn').addEventListener('click', function() {
     }
     if (count === 10) {
         avgFloat = sum / 10;
-    document.getElementById('avgResult').textContent = `Average float: ${avgFloat.toFixed(6)}`;
+        document.getElementById('avgResult').textContent = `Average float: ${avgFloat.toFixed(6)}`;
     } else {
-    document.getElementById('avgResult').textContent = 'Please enter all 10 floats!';
+        document.getElementById('avgResult').textContent = 'Please enter all 10 floats!';
         avgFloat = null;
     }
 });
 
-document.getElementById('calcFloatBtn').addEventListener('click', function() {
+// --- MAX/MIN CAP CALCULATION ---
+document.getElementById('calcFloatBtn').addEventListener('click', () => {
     const maxCap = parseFloat(document.getElementById('maxCap').value);
     const minCap = parseFloat(document.getElementById('minCap').value);
     if (isNaN(maxCap) || isNaN(minCap)) {
-    document.getElementById('finalFloatResult').textContent = 'Please enter Max Cap and Min Cap!';
+        document.getElementById('finalFloatResult').textContent = 'Please enter Max Cap and Min Cap!';
         return;
     }
     if (avgFloat === null) {
-    document.getElementById('finalFloatResult').textContent = 'Please calculate the average first!';
+        document.getElementById('finalFloatResult').textContent = 'Please calculate the average first!';
         return;
     }
     const resultFloat = (maxCap - minCap) * avgFloat + minCap;
-    document.getElementById('finalFloatResult').textContent = `Final float: ${resultFloat.toFixed(6)} (${getWearRating(resultFloat)})`;
+    const currentLang = langSelect.value;
+    document.getElementById('finalFloatResult').textContent = `Final float: ${resultFloat.toFixed(6)} (${getWearRating(resultFloat, currentLang)})`;
 });
 
-// Correct the comparison operators so that the upper limit is no longer inclusive
-function getWearRating(floatVal) {
-    if (floatVal >= 0 && floatVal < 0.07) return 'Factory New';
-    if (floatVal >= 0.07 && floatVal < 0.15) return 'Minimal Wear';
-    if (floatVal >= 0.15 && floatVal < 0.38) return 'Field-Tested';
-    if (floatVal >= 0.38 && floatVal < 0.45) return 'Well-Worn';
-    if (floatVal >= 0.45 && floatVal <= 1.00) return 'Battle-Scarred';
-    return '';
-}
-
-
-// --- Max Avg Float Tab: Skin Search, Autocomplete, Auto-Cap ---
-
-
-// --- Max Avg Float Tab: Skin Search, Autocomplete, Auto-Cap, Language ---
+// --- SKIN SEARCH / AUTOCOMPLETE / LANGUAGE ---
 let skins = [];
-let lang = 'en';
 const skinSearch = document.getElementById('skinSearch');
 const skinSuggestions = document.getElementById('skinSuggestions');
 const maxCap2 = document.getElementById('maxCap2');
@@ -131,16 +141,17 @@ function fetchSkins(language) {
         });
 }
 
-langSelect.addEventListener('change', function() {
-    lang = langSelect.value;
-    fetchSkins(lang);
-    skinSearch.value = '';
-    maxCap2.value = '';
-    minCap2.value = '';
-    skinSuggestions.innerHTML = '';
+// Fix: language change updates both skins AND wear ratings
+langSelect.addEventListener('change', () => {
+    fetchSkins(langSelect.value);
+    // Update all current floats to show correct =FN / etc. in new language
+    for (let i = 1; i <= 10; i++) {
+        const val = parseFloat(document.getElementById(`float${i}`).value);
+        document.getElementById(`wearLabel${i}`).textContent = !isNaN(val) ? '= ' + getWearRatingShort(val) : '';
+    }
 });
 
-fetchSkins(lang);
+fetchSkins(langSelect.value);
 
 skinSearch.addEventListener('input', function() {
     const val = skinSearch.value.trim().toLowerCase();

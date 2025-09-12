@@ -263,3 +263,125 @@ button:hover {
     background: #181a1b;
     border: 2px solid #23272a;
 }
+/* Zusätzliche Stile für Filter */
+.filter-button {
+    background: #43b581;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+    font-size: 0.9em;
+}
+
+.filter-button:hover {
+    background: #3a9c6d;
+}
+
+.filter-popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #23272a;
+    border: 2px solid #7289da;
+    border-radius: 8px;
+    padding: 20px;
+    z-index: 1000;
+    width: 80%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.filter-popup h3 {
+    margin-top: 0;
+    color: #43b581;
+    border-bottom: 1px solid #43b581;
+    padding-bottom: 10px;
+}
+
+.filter-section {
+    margin-bottom: 20px;
+}
+
+.filter-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 10px;
+    background: #2c2f33;
+    border-radius: 4px;
+}
+
+.filter-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.filter-option input[type="checkbox"] {
+    margin: 0;
+}
+
+.filter-option label {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.collection-icon {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+    border-radius: 3px;
+}
+
+.filter-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.filter-buttons button {
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+#applyFilters {
+    background: #43b581;
+    color: white;
+    border: none;
+}
+
+#resetFilters {
+    background: #7289da;
+    color: white;
+    border: none;
+}
+
+#closeFilterPopup {
+    background: #f04747;
+    color: white;
+    border: none;
+}
+
+.skin-rarity {
+    font-size: 0.8em;
+    font-weight: bold;
+    margin-right: 8px;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}

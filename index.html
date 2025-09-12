@@ -32,8 +32,14 @@
         <div id="tabContentAvg" class="tab-content" style="display:none">
             <form id="avgForm">
                 <h2>Maximalen Avg Float berechnen</h2>
-                <label for="targetFloat">Ziel-Float:</label>
-                <input type="number" step="any" id="targetFloat" name="targetFloat">
+                <label for="targetFloat">Ziel-Wear:</label>
+                <select id="targetFloat" name="targetFloat">
+                    <option value="0.07">Factory New (0.00 - 0.07)</option>
+                    <option value="0.15">Minimal Wear (0.07 - 0.15)</option>
+                    <option value="0.38">Field-Tested (0.15 - 0.38)</option>
+                    <option value="0.45">Well-Worn (0.38 - 0.45)</option>
+                    <option value="1.00">Battle-Scarred (0.45 - 1.00)</option>
+                </select>
                 <label for="maxCap2">Max Cap:</label>
                 <input type="number" step="any" id="maxCap2" name="maxCap2">
                 <label for="minCap2">Min Cap:</label>

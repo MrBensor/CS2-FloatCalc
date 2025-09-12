@@ -5,47 +5,69 @@
     gap: 10px;
 }
 .tab-btn {
-    background: #23272a;
+    background: linear-gradient(90deg, #23272a 60%, #2c2f33 100%);
     color: #fff;
     border: none;
-    padding: 10px 24px;
-    border-radius: 8px 8px 0 0;
-    font-size: 1em;
+    padding: 12px 32px;
+    border-radius: 10px 10px 0 0;
+    font-size: 1.1em;
     cursor: pointer;
     outline: none;
     border-bottom: 3px solid transparent;
-    transition: background 0.2s, border-bottom 0.2s;
+    transition: background 0.2s, border-bottom 0.2s, color 0.2s;
+    letter-spacing: 1px;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
 .tab-btn.active {
-    background: #181a1b;
-    border-bottom: 3px solid #7289da;
+    background: linear-gradient(90deg, #181a1b 60%, #23272a 100%);
+    border-bottom: 3px solid #43b581;
     color: #43b581;
 }
 .tab-content {
     display: block;
+    background: #181a1b;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    padding: 24px 18px 10px 18px;
+    margin-bottom: 20px;
 }
 body {
-    font-family: Arial, sans-serif;
-    background: #181a1b;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(135deg, #23272a 0%, #181a1b 100%);
     color: #f1f1f1;
     margin: 0;
     padding: 0;
+    min-height: 100vh;
 }
 .container {
-    max-width: 500px;
+    max-width: 540px;
     margin: 40px auto;
     background: #23272a;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-    padding: 30px 40px;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.45);
+    padding: 32px 40px 20px 40px;
+    border: 1.5px solid #43b58133;
 }
 h1 {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 32px;
+    font-size: 2.1em;
+    color: #43b581;
+    letter-spacing: 2px;
+    text-shadow: 0 2px 8px #23272a;
 }
 h2 {
-    margin-top: 30px;
-    font-size: 1.2em;
+    margin-top: 28px;
+    font-size: 1.15em;
+    color: #7289da;
+    letter-spacing: 1px;
+}
+label {
+    color: #b9bbbe;
+    font-size: 1em;
+    margin-top: 10px;
+    display: block;
 }
 #floatInputs {
     display: grid;
@@ -53,29 +75,44 @@ h2 {
     gap: 10px;
     margin-bottom: 20px;
 }
-input[type="number"] {
+input[type="number"], select {
     width: 100%;
-    padding: 6px;
-    border-radius: 4px;
-    border: 1px solid #444;
+    padding: 7px 10px;
+    border-radius: 5px;
+    border: 1.5px solid #444;
     background: #2c2f33;
     color: #f1f1f1;
+    font-size: 1em;
+    margin-bottom: 8px;
+    box-sizing: border-box;
+    transition: border 0.2s;
+}
+input[type="number"]:focus, select:focus {
+    border: 1.5px solid #43b581;
+    outline: none;
 }
 button {
-    background: #7289da;
+    background: linear-gradient(90deg, #7289da 60%, #43b581 100%);
     color: #fff;
     border: none;
-    padding: 10px 18px;
-    border-radius: 5px;
+    padding: 11px 20px;
+    border-radius: 6px;
     cursor: pointer;
     margin-top: 10px;
-    font-size: 1em;
+    font-size: 1.05em;
+    font-weight: bold;
+    letter-spacing: 1px;
+    box-shadow: 0 2px 8px rgba(67,181,129,0.08);
+    transition: background 0.2s, color 0.2s;
 }
 button:hover {
-    background: #5b6eae;
+    background: linear-gradient(90deg, #5b6eae 60%, #43b581 100%);
+    color: #23272a;
 }
 #avgResult, #finalFloatResult, #maxAvgResult {
     margin-top: 10px;
     font-weight: bold;
     color: #43b581;
+    font-size: 1.08em;
+    text-shadow: 0 1px 4px #23272a;
 }

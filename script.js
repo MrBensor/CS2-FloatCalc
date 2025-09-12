@@ -97,6 +97,15 @@ document.getElementById('calcMaxAvgBtn').addEventListener('click', function() {
         document.getElementById('maxAvgResult').textContent = 'Bitte alle Werte eingeben!';
         return;
     }
+    let wearName = '';
+    switch(targetFloat) {
+        case 0.07: wearName = 'Factory New'; break;
+        case 0.15: wearName = 'Minimal Wear'; break;
+        case 0.38: wearName = 'Field-Tested'; break;
+        case 0.45: wearName = 'Well-Worn'; break;
+        case 1.00: wearName = 'Battle-Scarred'; break;
+        default: wearName = '';
+    }
     const maxAvg = (targetFloat - minCap2) / (maxCap2 - minCap2);
-    document.getElementById('maxAvgResult').textContent = `Maximaler Avg Float für Ziel-Float ${targetFloat.toFixed(6)}: ${maxAvg.toFixed(6)}`;
+    document.getElementById('maxAvgResult').textContent = `Maximaler Avg Float für ${wearName} (${targetFloat.toFixed(2)}): ${maxAvg.toFixed(6)}`;
 });

@@ -32,6 +32,9 @@
         <div id="tabContentAvg" class="tab-content" style="display:none">
             <form id="avgForm">
                 <h2>Maximalen Avg Float berechnen</h2>
+                <label for="skinSearch">Skin suchen:</label>
+                <input type="text" id="skinSearch" name="skinSearch" autocomplete="off" placeholder="z.B. AK-47 | Redline">
+                <div id="skinSuggestions" class="suggestions"></div>
                 <label for="targetFloat">Ziel-Wear:</label>
                 <select id="targetFloat" name="targetFloat">
                     <option value="0.07">Factory New (0.00 - 0.07)</option>
@@ -41,9 +44,9 @@
                     <option value="1.00">Battle-Scarred (0.45 - 1.00)</option>
                 </select>
                 <label for="maxCap2">Max Cap:</label>
-                <input type="number" step="any" id="maxCap2" name="maxCap2">
+                <input type="number" step="any" id="maxCap2" name="maxCap2" readonly>
                 <label for="minCap2">Min Cap:</label>
-                <input type="number" step="any" id="minCap2" name="minCap2">
+                <input type="number" step="any" id="minCap2" name="minCap2" readonly>
                 <button type="button" id="calcMaxAvgBtn">Maximalen Avg Float berechnen</button>
                 <div id="maxAvgResult"></div>
             </form>

@@ -94,13 +94,56 @@ document.getElementById('calcFloatBtn').addEventListener('click', function() {
     document.getElementById('finalFloatResult').textContent = `Endgültiger Float: ${resultFloat.toFixed(6)} (${getWearRating(resultFloat)})`;
 });
 
-// Maximalen Avg Float Tab
+
+// --- Maximalen Avg Float Tab: Skin Search, Autocomplete, Auto-Cap ---
+let skins = [];
+fetch('skins.json')
+    .then(res => res.json())
+    .then(data => { skins = data; });
+
+const skinSearch = document.getElementById('skinSearch');
+const skinSuggestions = document.getElementById('skinSuggestions');
+const maxCap2 = document.getElementById('maxCap2');
+const minCap2 = document.getElementById('minCap2');
+
+skinSearch.addEventListener('input', function() {
+    const val = skinSearch.value.trim().toLowerCase();
+    skinSuggestions.innerHTML = '';
+    if (!val) {
+        skinSuggestions.style.display = 'none';
+        return;
+    }
+    const matches = skins.filter(s => s.name.toLowerCase().includes(val));
+    if (matches.length === 0) {
+        skinSuggestions.style.display = 'none';
+        return;
+    }
+    matches.forEach(skin => {
+        const div = document.createElement('div');
+        div.className = 'suggestion';
+        div.textContent = skin.name;
+        div.addEventListener('click', function() {
+            skinSearch.value = skin.name;
+            maxCap2.value = skin.max;
+            minCap2.value = skin.min;
+            skinSuggestions.style.display = 'none';
+        });
+        skinSuggestions.appendChild(div);
+    });
+    skinSuggestions.style.display = 'block';
+});
+
+// Hide suggestions on blur
+skinSearch.addEventListener('blur', function() {
+    setTimeout(() => skinSuggestions.style.display = 'none', 150);
+});
+
 document.getElementById('calcMaxAvgBtn').addEventListener('click', function() {
     const targetFloat = parseFloat(document.getElementById('targetFloat').value);
-    const maxCap2 = parseFloat(document.getElementById('maxCap2').value);
-    const minCap2 = parseFloat(document.getElementById('minCap2').value);
-    if (isNaN(targetFloat) || isNaN(maxCap2) || isNaN(minCap2)) {
-        document.getElementById('maxAvgResult').textContent = 'Bitte alle Werte eingeben!';
+    const maxCap2Val = parseFloat(maxCap2.value);
+    const minCap2Val = parseFloat(minCap2.value);
+    if (isNaN(targetFloat) || isNaN(maxCap2Val) || isNaN(minCap2Val)) {
+        document.getElementById('maxAvgResult').textContent = 'Bitte Skin und Wear auswählen!';
         return;
     }
     let wearName = '';
@@ -112,6 +155,6 @@ document.getElementById('calcMaxAvgBtn').addEventListener('click', function() {
         case 1.00: wearName = 'Battle-Scarred'; break;
         default: wearName = '';
     }
-    const maxAvg = (targetFloat - minCap2) / (maxCap2 - minCap2);
+    const maxAvg = (targetFloat - minCap2Val) / (maxCap2Val - minCap2Val);
     document.getElementById('maxAvgResult').textContent = `Maximaler Avg Float für ${wearName} (${targetFloat.toFixed(2)}): ${maxAvg.toFixed(6)}`;
 });

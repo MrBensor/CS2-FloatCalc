@@ -1,3 +1,21 @@
+// Tab-Logik
+const tabFloat = document.getElementById('tabFloat');
+const tabAvg = document.getElementById('tabAvg');
+const tabContentFloat = document.getElementById('tabContentFloat');
+const tabContentAvg = document.getElementById('tabContentAvg');
+tabFloat.addEventListener('click', function() {
+    tabFloat.classList.add('active');
+    tabAvg.classList.remove('active');
+    tabContentFloat.style.display = 'block';
+    tabContentAvg.style.display = 'none';
+});
+tabAvg.addEventListener('click', function() {
+    tabAvg.classList.add('active');
+    tabFloat.classList.remove('active');
+    tabContentFloat.style.display = 'none';
+    tabContentAvg.style.display = 'block';
+});
+
 // Float-Input-Felder generieren und Wear Rating anzeigen
 const floatInputsDiv = document.getElementById('floatInputs');
 const wearRatingsDiv = document.getElementById('wearRatings');
@@ -33,9 +51,7 @@ for (let i = 1; i <= 10; i++) {
 updateWearRatings();
 
 // Durchschnitt berechnen
-document.getElementById('calcAvgBtn').addEventListener('click', function() {
 let avgFloat = null;
-let lastFloat = null;
 document.getElementById('calcAvgBtn').addEventListener('click', function() {
     let sum = 0;
     let count = 0;
@@ -60,26 +76,27 @@ document.getElementById('calcAvgBtn').addEventListener('click', function() {
 document.getElementById('calcFloatBtn').addEventListener('click', function() {
     const maxCap = parseFloat(document.getElementById('maxCap').value);
     const minCap = parseFloat(document.getElementById('minCap').value);
-    const mode = document.getElementById('modeSelect').value;
     if (isNaN(maxCap) || isNaN(minCap)) {
         document.getElementById('finalFloatResult').textContent = 'Bitte Max Cap und Min Cap eingeben!';
         return;
     }
-    if (mode === 'finalFloat') {
-        if (avgFloat === null) {
-            document.getElementById('finalFloatResult').textContent = 'Bitte zuerst den Durchschnitt berechnen!';
-            return;
-        }
-        const resultFloat = (maxCap - minCap) * avgFloat + minCap;
-        document.getElementById('finalFloatResult').textContent = `Endgültiger Float: ${resultFloat.toFixed(6)} (${getWearRating(resultFloat)})`;
-    } else if (mode === 'maxAvgFloat') {
-        // Berechne maximalen avg float für gewünschten Ziel-Float
-        const targetFloat = parseFloat(prompt('Welchen Float willst du erreichen?'));
-        if (isNaN(targetFloat)) {
-            document.getElementById('finalFloatResult').textContent = 'Ungültiger Ziel-Float!';
-            return;
-        }
-        const maxAvg = (targetFloat - minCap) / (maxCap - minCap);
-        document.getElementById('finalFloatResult').textContent = `Maximaler Avg Float für Ziel-Float ${targetFloat.toFixed(6)}: ${maxAvg.toFixed(6)}`;
+    if (avgFloat === null) {
+        document.getElementById('finalFloatResult').textContent = 'Bitte zuerst den Durchschnitt berechnen!';
+        return;
     }
+    const resultFloat = (maxCap - minCap) * avgFloat + minCap;
+    document.getElementById('finalFloatResult').textContent = `Endgültiger Float: ${resultFloat.toFixed(6)} (${getWearRating(resultFloat)})`;
+});
+
+// Maximalen Avg Float Tab
+document.getElementById('calcMaxAvgBtn').addEventListener('click', function() {
+    const targetFloat = parseFloat(document.getElementById('targetFloat').value);
+    const maxCap2 = parseFloat(document.getElementById('maxCap2').value);
+    const minCap2 = parseFloat(document.getElementById('minCap2').value);
+    if (isNaN(targetFloat) || isNaN(maxCap2) || isNaN(minCap2)) {
+        document.getElementById('maxAvgResult').textContent = 'Bitte alle Werte eingeben!';
+        return;
+    }
+    const maxAvg = (targetFloat - minCap2) / (maxCap2 - minCap2);
+    document.getElementById('maxAvgResult').textContent = `Maximaler Avg Float für Ziel-Float ${targetFloat.toFixed(6)}: ${maxAvg.toFixed(6)}`;
 });

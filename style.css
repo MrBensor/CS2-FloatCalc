@@ -1,3 +1,29 @@
+.tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+    gap: 10px;
+}
+.tab-btn {
+    background: #23272a;
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 8px 8px 0 0;
+    font-size: 1em;
+    cursor: pointer;
+    outline: none;
+    border-bottom: 3px solid transparent;
+    transition: background 0.2s, border-bottom 0.2s;
+}
+.tab-btn.active {
+    background: #181a1b;
+    border-bottom: 3px solid #7289da;
+    color: #43b581;
+}
+.tab-content {
+    display: block;
+}
 body {
     font-family: Arial, sans-serif;
     background: #181a1b;
@@ -48,7 +74,7 @@ button {
 button:hover {
     background: #5b6eae;
 }
-#avgResult, #finalFloatResult {
+#avgResult, #finalFloatResult, #maxAvgResult {
     margin-top: 10px;
     font-weight: bold;
     color: #43b581;

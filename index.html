@@ -9,27 +9,39 @@
 <body>
     <div class="container">
         <h1>CS2 Float Manager</h1>
-        <form id="floatForm">
-            <h2>Berechnungsmodus wählen</h2>
-            <select id="modeSelect">
-                <option value="finalFloat">Endgültigen Float berechnen</option>
-                <option value="maxAvgFloat">Maximalen Avg Float berechnen</option>
-            </select>
-            <h2>1. Gib 10 Floats für CS2 Waffen ein</h2>
-            <div id="floatInputs">
-                <!-- Float Inputs werden hier per JS generiert -->
-            </div>
-            <div id="wearRatings"></div>
-            <button type="button" id="calcAvgBtn">Durchschnitt berechnen</button>
-            <div id="avgResult"></div>
-            <h2>2. Max/Min Cap eingeben</h2>
-            <label for="maxCap">Max Cap:</label>
-            <input type="number" step="any" id="maxCap" name="maxCap">
-            <label for="minCap">Min Cap:</label>
-            <input type="number" step="any" id="minCap" name="minCap">
-            <button type="button" id="calcFloatBtn">Berechnen</button>
-            <div id="finalFloatResult"></div>
-        </form>
+        <div class="tabs">
+            <button type="button" class="tab-btn active" id="tabFloat">Endgültigen Float berechnen</button>
+            <button type="button" class="tab-btn" id="tabAvg">Maximalen Avg Float berechnen</button>
+        </div>
+        <div id="tabContentFloat" class="tab-content">
+            <form id="floatForm">
+                <h2>1. Gib 10 Floats für CS2 Waffen ein</h2>
+                <div id="floatInputs"></div>
+                <div id="wearRatings"></div>
+                <button type="button" id="calcAvgBtn">Durchschnitt berechnen</button>
+                <div id="avgResult"></div>
+                <h2>2. Max/Min Cap eingeben</h2>
+                <label for="maxCap">Max Cap:</label>
+                <input type="number" step="any" id="maxCap" name="maxCap">
+                <label for="minCap">Min Cap:</label>
+                <input type="number" step="any" id="minCap" name="minCap">
+                <button type="button" id="calcFloatBtn">Endgültigen Float berechnen</button>
+                <div id="finalFloatResult"></div>
+            </form>
+        </div>
+        <div id="tabContentAvg" class="tab-content" style="display:none">
+            <form id="avgForm">
+                <h2>Maximalen Avg Float berechnen</h2>
+                <label for="targetFloat">Ziel-Float:</label>
+                <input type="number" step="any" id="targetFloat" name="targetFloat">
+                <label for="maxCap2">Max Cap:</label>
+                <input type="number" step="any" id="maxCap2" name="maxCap2">
+                <label for="minCap2">Min Cap:</label>
+                <input type="number" step="any" id="minCap2" name="minCap2">
+                <button type="button" id="calcMaxAvgBtn">Maximalen Avg Float berechnen</button>
+                <div id="maxAvgResult"></div>
+            </form>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>

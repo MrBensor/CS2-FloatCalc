@@ -92,6 +92,16 @@ document.getElementById('calcFloatBtn').addEventListener('click', function() {
     }
     const resultFloat = (maxCap - minCap) * avgFloat + minCap;
     document.getElementById('finalFloatResult').textContent = `Endgültiger Float: ${resultFloat.toFixed(6)} (${getWearRating(resultFloat)})`;
+
+// Funktion für Wear Rating (Langform) nachtragen, falls sie fehlt
+function getWearRating(floatVal) {
+    if (floatVal < 0.07) return 'Factory New';
+    if (floatVal < 0.15) return 'Minimal Wear';
+    if (floatVal < 0.38) return 'Field-Tested';
+    if (floatVal < 0.45) return 'Well-Worn';
+    if (floatVal <= 1.00) return 'Battle-Scarred';
+    return '';
+}
 });
 
 

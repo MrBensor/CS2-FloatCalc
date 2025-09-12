@@ -1,6 +1,6 @@
 const translations = {
     en: {
-        titleTag: "CS2 Manager",
+        titleTag: "CS2 Float Manager",
         mainTitle: "CS2 Float Manager",
         langLabel: "🌐",
         tabFloat: "Calculate Final Float",
@@ -23,11 +23,11 @@ const translations = {
         maxCap2Label: "Max Cap:",
         minCap2Label: "Min Cap:",
         calcMaxAvgBtn: "Calculate Max Avg Float",
-        wearShort: ['FN', 'MW', 'FT', 'WW', 'BS'], // Kurzlabels für Float-Input
-        wearFull: ['Factory New','Minimal Wear','Field-Tested','Well-Worn','Battle-Scarred'] // Langlabels
+        wearShort: ['FN', 'MW', 'FT', 'WW', 'BS'],
+        wearFull: ['Factory New','Minimal Wear','Field-Tested','Well-Worn','Battle-Scarred']
     },
     de: {
-        titleTag: "CS2 Manager",
+        titleTag: "CS2 Float Manager",
         mainTitle: "CS2 Float Manager",
         langLabel: "🌐",
         tabFloat: "Finalen Float berechnen",
@@ -50,7 +50,7 @@ const translations = {
         maxCap2Label: "Max Cap:",
         minCap2Label: "Min Cap:",
         calcMaxAvgBtn: "Max. Durchschnitt berechnen",
-        wearShort: ['FN', 'MW', 'FT', 'WW', 'BS'], // Kurzlabels für Float-Input
-        wearFull: ['Fabrikneu','Minimale Gebrauchsspuren','Einsatzerprobt','Abgenutzt','Kampfspuren'] // Langlabels
+        wearShort: ['FN', 'MW', 'FT', 'WW', 'BS'],
+        wearFull: ['Fabrikneu','Minimale Gebrauchsspuren','Einsatzerprobt','Abgenutzt','Kampfspuren']
     }
 };

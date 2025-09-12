@@ -236,32 +236,48 @@ document.getElementById('calcMaxAvgBtn').addEventListener('click', function() {
 // Sprache aus URL oder localStorage holen
 function getLang() {
     const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('lang') || localStorage.getItem('lang') || 'de';
+    return urlParams.get('lang') || localStorage.getItem('lang') || 'en';
 }
 
 function setLang(lang) {
     localStorage.setItem('lang', lang);
-    // Seite neu laden mit Sprachparameter
     const url = new URL(window.location);
     url.searchParams.set('lang', lang);
     window.location = url;
 }
 
-// Texte setzen
 function applyTranslations(lang) {
-    document.getElementById('title').textContent = translations[lang].title;
-    document.getElementById('tab1').textContent = translations[lang].tab1;
-    document.getElementById('tab2').textContent = translations[lang].tab2;
-    document.getElementById('skinSearch').placeholder = translations[lang].searchPlaceholder;
-    // ...weitere IDs
+    const t = translations[lang] || translations['en'];
+    document.title = t.titleTag;
+    document.getElementById('titleTag').textContent = t.titleTag;
+    document.getElementById('mainTitle').textContent = t.mainTitle;
+    document.getElementById('langLabel').textContent = t.langLabel;
+    document.getElementById('tabFloat').textContent = t.tabFloat;
+    document.getElementById('tabAvg').textContent = t.tabAvg;
+    document.getElementById('floatStep1').textContent = t.floatStep1;
+    document.getElementById('calcAvgBtn').textContent = t.calcAvgBtn;
+    document.getElementById('floatStep2').textContent = t.floatStep2;
+    document.getElementById('maxCapLabel').textContent = t.maxCapLabel;
+    document.getElementById('minCapLabel').textContent = t.minCapLabel;
+    document.getElementById('calcFloatBtn').textContent = t.calcFloatBtn;
+    document.getElementById('avgStep2').textContent = t.avgStep2;
+    document.getElementById('skinSearchLabel').textContent = t.skinSearchLabel;
+    document.getElementById('skinSearch').placeholder = t.skinSearchPlaceholder;
+    document.getElementById('targetFloatLabel').textContent = t.targetFloatLabel;
+    document.getElementById('optFactoryNew').textContent = t.optFactoryNew;
+    document.getElementById('optMinimalWear').textContent = t.optMinimalWear;
+    document.getElementById('optFieldTested').textContent = t.optFieldTested;
+    document.getElementById('optWellWorn').textContent = t.optWellWorn;
+    document.getElementById('optBattleScarred').textContent = t.optBattleScarred;
+    document.getElementById('maxCap2Label').textContent = t.maxCap2Label;
+    document.getElementById('minCap2Label').textContent = t.minCap2Label;
+    document.getElementById('calcMaxAvgBtn').textContent = t.calcMaxAvgBtn;
+    document.getElementById('langSelect').value = lang;
 }
 
-// Sprachumschalter-Event
 document.getElementById('langSelect').addEventListener('change', function() {
     setLang(this.value);
 });
 
-// Beim Laden anwenden
 const lang = getLang();
 applyTranslations(lang);
-document.getElementById('langSelect').value = lang;

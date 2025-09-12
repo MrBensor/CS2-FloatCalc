@@ -8,7 +8,16 @@
 </head>
 <body>
     <div class="container">
-        <h1>CS2 Float Manager</h1>
+        <div class="header-row">
+            <h1>CS2 Float Manager</h1>
+            <div class="lang-switch">
+                <label for="langSelect">🌐</label>
+                <select id="langSelect">
+                    <option value="en">English</option>
+                    <option value="de">Deutsch</option>
+                </select>
+            </div>
+        </div>
         <div class="tabs">
             <button type="button" class="tab-btn active" id="tabFloat">Endgültigen Float berechnen</button>
             <button type="button" class="tab-btn" id="tabAvg">Maximalen Avg Float berechnen</button>
@@ -32,9 +41,11 @@
         <div id="tabContentAvg" class="tab-content" style="display:none">
             <form id="avgForm">
                 <h2>Maximalen Avg Float berechnen</h2>
-                <label for="skinSearch">Skin suchen:</label>
-                <input type="text" id="skinSearch" name="skinSearch" autocomplete="off" placeholder="z.B. AK-47 | Redline">
-                <div id="skinSuggestions" class="suggestions"></div>
+                                <label for="skinSearch">Skin suchen:</label>
+                                <div style="position:relative; width:100%;">
+                                    <input type="text" id="skinSearch" name="skinSearch" autocomplete="off" placeholder="z.B. AK-47 | Redline">
+                                    <div id="skinSuggestions" class="suggestions"></div>
+                                </div>
                 <label for="targetFloat">Ziel-Wear:</label>
                 <select id="targetFloat" name="targetFloat">
                     <option value="0.07">Factory New (0.00 - 0.07)</option>

@@ -1,13 +1,117 @@
+.header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+}
+.lang-switch {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 1.1em;
+    color: #7289da;
+    background: #181a1b;
+    border-radius: 6px;
+    padding: 4px 10px;
+    box-shadow: 0 1px 4px #23272a44;
+}
+#langSelect {
+    background: #23272a;
+    color: #fff;
+    border: 1.5px solid #7289da;
+    border-radius: 4px;
+    font-size: 1em;
+    padding: 2px 8px;
+    outline: none;
+}
+#langSelect:focus {
+    border: 1.5px solid #43b581;
+}
 #skinSuggestions {
     background: #23272a;
-    border: 1.5px solid #7289da;
+    border: 2px solid #7289da;
+    border-top: none;
     border-radius: 0 0 8px 8px;
-    max-height: 140px;
+    max-height: 320px;
     overflow-y: auto;
     position: absolute;
-    z-index: 10;
-    width: 90%;
-    left: 5%;
+    z-index: 20;
+    width: 100%;
+    left: 0;
+    box-shadow: 0 2px 8px rgba(67,181,129,0.12);
+    display: none;
+}
+#skinSuggestions .suggestion {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    cursor: pointer;
+    color: #fff;
+    font-size: 1em;
+    border-bottom: 1px solid #2c2f33;
+    transition: background 0.15s;
+    font-weight: bold;
+}
+#skinSuggestions .suggestion:last-child {
+    border-bottom: none;
+}
+#skinSuggestions .suggestion:hover {
+    background: #7289da;
+    color: #23272a;
+}
+#skinSuggestions .skin-img {
+    width: 48px;
+    height: 32px;
+    object-fit: contain;
+    border-radius: 4px;
+    background: #181a1b;
+    border: 1px solid #23272a;
+}
+#skinSuggestions .skin-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+#skinSuggestions .skin-name {
+    font-size: 1em;
+    font-weight: bold;
+    color: #fff;
+}
+#skinSuggestions .skin-float {
+    font-size: 0.95em;
+    color: #43b581;
+    font-weight: normal;
+}
+#skinSearch {
+    width: 100%;
+    font-size: 1.15em;
+    padding: 12px 14px;
+    border-radius: 7px 7px 0 0;
+    border: 2px solid #7289da;
+    background: #23272a;
+    color: #fff;
+    margin-bottom: 0;
+    box-sizing: border-box;
+    outline: none;
+    font-weight: bold;
+    letter-spacing: 1px;
+    margin-top: 2px;
+}
+#skinSearch:focus {
+    border: 2px solid #43b581;
+}
+#skinSuggestions {
+    background: #23272a;
+    border: 2px solid #7289da;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    max-height: 220px;
+    overflow-y: auto;
+    position: absolute;
+    z-index: 20;
+    width: 100%;
+    left: 0;
     box-shadow: 0 2px 8px rgba(67,181,129,0.12);
     display: none;
 }
@@ -18,6 +122,7 @@
     font-size: 1em;
     border-bottom: 1px solid #2c2f33;
     transition: background 0.15s;
+    font-weight: bold;
 }
 #skinSuggestions .suggestion:last-child {
     border-bottom: none;

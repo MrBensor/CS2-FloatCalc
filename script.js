@@ -96,15 +96,43 @@ document.getElementById('calcFloatBtn').addEventListener('click', function() {
 
 
 // --- Maximalen Avg Float Tab: Skin Search, Autocomplete, Auto-Cap ---
-let skins = [];
-fetch('skins.json')
-    .then(res => res.json())
-    .then(data => { skins = data; });
 
+
+// --- Maximalen Avg Float Tab: Skin Search, Autocomplete, Auto-Cap, Sprache ---
+let skins = [];
+let lang = 'en';
 const skinSearch = document.getElementById('skinSearch');
 const skinSuggestions = document.getElementById('skinSuggestions');
 const maxCap2 = document.getElementById('maxCap2');
 const minCap2 = document.getElementById('minCap2');
+const langSelect = document.getElementById('langSelect');
+
+function fetchSkins(language) {
+    skinSuggestions.innerHTML = '<div class="suggestion">Loading skins...</div>';
+    skinSuggestions.style.display = 'block';
+    fetch(`https://raw.githubusercontent.com/ByMykel/CSGO-API/main/public/api/${language}/skins.json`)
+        .then(res => res.json())
+        .then(data => {
+            skins = data;
+            skinSuggestions.innerHTML = '';
+            skinSuggestions.style.display = 'none';
+        })
+        .catch(() => {
+            skinSuggestions.innerHTML = '<div class="suggestion">Fehler beim Laden der Skins</div>';
+            skinSuggestions.style.display = 'block';
+        });
+}
+
+langSelect.addEventListener('change', function() {
+    lang = langSelect.value;
+    fetchSkins(lang);
+    skinSearch.value = '';
+    maxCap2.value = '';
+    minCap2.value = '';
+    skinSuggestions.innerHTML = '';
+});
+
+fetchSkins(lang);
 
 skinSearch.addEventListener('input', function() {
     const val = skinSearch.value.trim().toLowerCase();
@@ -113,7 +141,7 @@ skinSearch.addEventListener('input', function() {
         skinSuggestions.style.display = 'none';
         return;
     }
-    const matches = skins.filter(s => s.name.toLowerCase().includes(val));
+    const matches = skins.filter(skin => skin.name.toLowerCase().includes(val)).slice(0, 15);
     if (matches.length === 0) {
         skinSuggestions.style.display = 'none';
         return;
@@ -121,11 +149,27 @@ skinSearch.addEventListener('input', function() {
     matches.forEach(skin => {
         const div = document.createElement('div');
         div.className = 'suggestion';
-        div.textContent = skin.name;
+        // Bild, Name, Float Caps
+        const img = document.createElement('img');
+        img.src = skin.image;
+        img.alt = skin.name;
+        img.className = 'skin-img';
+        const info = document.createElement('div');
+        info.className = 'skin-info';
+        const name = document.createElement('span');
+        name.className = 'skin-name';
+        name.textContent = skin.name;
+        const floatSpan = document.createElement('span');
+        floatSpan.className = 'skin-float';
+        floatSpan.textContent = `Float: ${skin.min_float} - ${skin.max_float}`;
+        info.appendChild(name);
+        info.appendChild(floatSpan);
+        div.appendChild(img);
+        div.appendChild(info);
         div.addEventListener('click', function() {
             skinSearch.value = skin.name;
-            maxCap2.value = skin.max;
-            minCap2.value = skin.min;
+            maxCap2.value = skin.max_float;
+            minCap2.value = skin.min_float;
             skinSuggestions.style.display = 'none';
         });
         skinSuggestions.appendChild(div);
@@ -133,7 +177,9 @@ skinSearch.addEventListener('input', function() {
     skinSuggestions.style.display = 'block';
 });
 
-// Hide suggestions on blur
+skinSearch.addEventListener('focus', function() {
+    if (skinSuggestions.innerHTML) skinSuggestions.style.display = 'block';
+});
 skinSearch.addEventListener('blur', function() {
     setTimeout(() => skinSuggestions.style.display = 'none', 150);
 });

@@ -1,7 +1,6 @@
 // --- GLOBALE VARIABLEN ---
 let currentLang = 'en'; // Standardsprache ist Englisch
 let avgFloat = null;
-let skins = [];
 
 // --- TAB LOGIC ---
 const tabFloat = document.getElementById('tabFloat');
@@ -113,28 +112,8 @@ document.getElementById('calcFloatBtn').addEventListener('click', () => {
     document.getElementById('finalFloatResult').textContent = `${translations[currentLang].finalResultText} ${resultFloat.toFixed(6)} (${getWearRating(resultFloat)})`;
 });
 
-// --- SKIN SEARCH / AUTOCOMPLETE / LANGUAGE ---
-const skinSearch = document.getElementById('skinSearch');
-const skinSuggestions = document.getElementById('skinSuggestions');
-const maxCap2 = document.getElementById('maxCap2');
-const minCap2 = document.getElementById('minCap2');
+// --- LANGUAGE ---
 const langSelect = document.getElementById('langSelect');
-
-function fetchSkins(language) {
-    skinSuggestions.innerHTML = `<div class="suggestion">${translations[currentLang].loadingSkinsText}</div>`;
-    skinSuggestions.style.display = 'block';
-    fetch(`https://raw.githubusercontent.com/ByMykel/CSGO-API/main/public/api/${language}/skins.json`)
-        .then(res => res.json())
-        .then(data => {
-            skins = data;
-            skinSuggestions.innerHTML = '';
-            skinSuggestions.style.display = 'none';
-        })
-        .catch(() => {
-            skinSuggestions.innerHTML = `<div class="suggestion">${translations[currentLang].skinErrorText}</div>`;
-            skinSuggestions.style.display = 'block';
-        });
-}
 
 // Sprache ändern
 langSelect.addEventListener('change', function() {
@@ -158,86 +137,17 @@ langSelect.addEventListener('change', function() {
     }
 });
 
-skinSearch.addEventListener('input', function() {
-    const val = skinSearch.value.trim().toLowerCase();
-    skinSuggestions.innerHTML = '';
-    if (!val) {
-        skinSuggestions.style.display = 'none';
-        return;
-    }
-    // Split search term into words, all must be present in name, weapon or pattern
-    const words = val.split(/\s+/).filter(Boolean);
-        let matches = skins.filter(skin => {
-            // Check name, weapon.name, pattern.name
-            const fields = [skin.name, skin.weapon?.name, skin.pattern?.name].filter(Boolean).map(s => s.toLowerCase());
-            return words.every(w => fields.some(f => f.includes(w)));
-        })
-    .sort((a, b) => a.name.localeCompare(b.name, 'en', {sensitivity: 'base'}))
-    .slice(0, 500); // Always sort alphabetically and limit to 500
-    if (matches.length === 0) {
-        skinSuggestions.style.display = 'none';
-        return;
-    }
-    matches.forEach(skin => {
-        const div = document.createElement('div');
-        div.className = 'suggestion';
-    // Image, name, float caps
-        const img = document.createElement('img');
-        img.src = skin.image;
-        img.alt = skin.name;
-        img.className = 'skin-img';
-        const info = document.createElement('div');
-        info.className = 'skin-info';
-        const name = document.createElement('span');
-        name.className = 'skin-name';
-        name.textContent = skin.name;
-        const floatSpan = document.createElement('span');
-        floatSpan.className = 'skin-float';
-        floatSpan.textContent = `${translations[currentLang].floatRangeText} ${skin.min_float} - ${skin.max_float}`;
-        info.appendChild(name);
-        info.appendChild(floatSpan);
-        div.appendChild(img);
-        div.appendChild(info);
-        div.addEventListener('click', function() {
-            skinSearch.value = skin.name;
-            maxCap2.value = skin.max_float;
-            minCap2.value = skin.min_float;
-            // Show image left of search field
-            const selectedImg = document.getElementById('selectedSkinImg');
-            selectedImg.src = skin.image;
-            selectedImg.alt = skin.name;
-            selectedImg.style.display = 'block';
-            skinSuggestions.style.display = 'none';
-        });
-        skinSuggestions.appendChild(div);
-    });
-    skinSuggestions.style.display = 'block';
-});
-
-skinSearch.addEventListener('focus', function() {
-    if (skinSuggestions.innerHTML) skinSuggestions.style.display = 'block';
-});
-// Reset image if search field is cleared
-skinSearch.addEventListener('input', function() {
-    if (!skinSearch.value.trim()) {
-        const selectedImg = document.getElementById('selectedSkinImg');
-        selectedImg.src = '';
-        selectedImg.alt = '';
-        selectedImg.style.display = 'none';
-    }
-});
-skinSearch.addEventListener('blur', function() {
-    setTimeout(() => skinSuggestions.style.display = 'none', 150);
-});
-
-document.getElementById('calcMaxAvgBtn').addEventListener('click', function() {
+// Funktion zum Berechnen des maximalen Durchschnitts-Floats
+function calculateMaxAvgFloat() {
     const targetFloat = parseFloat(document.getElementById('targetFloat').value);
-    const maxCap2Val = parseFloat(maxCap2.value);
-    const minCap2Val = parseFloat(minCap2.value);
+    const maxCap2Val = parseFloat(document.getElementById('maxCap2').value);
+    const minCap2Val = parseFloat(document.getElementById('minCap2').value);
+    
     if (isNaN(targetFloat) || isNaN(maxCap2Val) || isNaN(minCap2Val)) {
         document.getElementById('maxAvgResult').textContent = translations[currentLang].skinSelectErrorText;
         return;
     }
+    
     let wearName = '';
     // Compare exact values, do not round
     if (targetFloat === 0.0699999) wearName = translations[currentLang].wearFull[0];
@@ -248,7 +158,7 @@ document.getElementById('calcMaxAvgBtn').addEventListener('click', function() {
     
     const maxAvg = (targetFloat - minCap2Val) / (maxCap2Val - minCap2Val);
     document.getElementById('maxAvgResult').textContent = `${translations[currentLang].maxAvgResultText} ${wearName} (${targetFloat}): ${maxAvg.toFixed(6)}`;
-});
+}
 
 // Sprache aus URL oder localStorage holen
 function getLang() {
@@ -297,6 +207,11 @@ document.addEventListener('DOMContentLoaded', function() {
     currentLang = getLang();
     applyTranslations(currentLang);
     createFloatInputs();
-    fetchSkins(currentLang);
+    fetchSkins(currentLang).then(() => {
+        initSkinSearch();
+    });
     document.getElementById('langSelect').value = currentLang;
+    
+    // Event-Listener für den Calculate-Max-Avg-Button
+    document.getElementById('calcMaxAvgBtn').addEventListener('click', calculateMaxAvgFloat);
 });

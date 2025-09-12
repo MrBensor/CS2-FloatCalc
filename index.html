@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CS2-Manager</title>
+    <title>CS2 Manager</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -19,37 +19,37 @@
             </div>
         </div>
         <div class="tabs">
-            <button type="button" class="tab-btn active" id="tabFloat">Endgültigen Float berechnen</button>
-            <button type="button" class="tab-btn" id="tabAvg">Maximalen Avg Float berechnen</button>
+            <button type="button" class="tab-btn active" id="tabFloat">Calculate Final Float</button>
+            <button type="button" class="tab-btn" id="tabAvg">Calculate Max Avg Float</button>
         </div>
         <div id="tabContentFloat" class="tab-content">
             <form id="floatForm">
-                <h2>1. Gib 10 Floats für CS2 Waffen ein</h2>
+                <h2>1. Enter 10 floats for CS2 weapons</h2>
                 <div id="floatInputs"></div>
                 <div id="wearRatings"></div>
-                <button type="button" id="calcAvgBtn">Durchschnitt berechnen</button>
+                <button type="button" id="calcAvgBtn">Calculate average</button>
                 <div id="avgResult"></div>
-                <h2>2. Max/Min Cap eingeben</h2>
+                <h2>2. Enter Max/Min Cap</h2>
                 <label for="maxCap">Max Cap:</label>
                 <input type="number" step="any" id="maxCap" name="maxCap">
                 <label for="minCap">Min Cap:</label>
                 <input type="number" step="any" id="minCap" name="minCap">
-                <button type="button" id="calcFloatBtn">Endgültigen Float berechnen</button>
+                <button type="button" id="calcFloatBtn">Calculate final float</button>
                 <div id="finalFloatResult"></div>
             </form>
         </div>
         <div id="tabContentAvg" class="tab-content" style="display:none">
             <form id="avgForm">
-                <h2>Maximalen Avg Float berechnen</h2>
-                                <label for="skinSearch">Skin suchen:</label>
-                                                <div style="position:relative; width:100%; display:flex; align-items:center; gap:12px;">
-                                                    <img id="selectedSkinImg" src="" alt="" style="width:56px;height:38px;object-fit:contain;border-radius:5px;display:none;background:#181a1b;border:1.5px solid #23272a;">
-                                                    <div style="flex:1;position:relative;">
-                                                        <input type="text" id="skinSearch" name="skinSearch" autocomplete="off" placeholder="z.B. AK-47 | Redline">
-                                                        <div id="skinSuggestions" class="suggestions"></div>
-                                                    </div>
-                                                </div>
-                <label for="targetFloat">Ziel-Wear:</label>
+                <h2>2. Calculate Max Avg Float</h2>
+                <label for="skinSearch">Search skin:</label>
+                <div style="position:relative; width:100%; display:flex; align-items:center; gap:12px;">
+                    <img id="selectedSkinImg" src="" alt="" style="width:56px;height:38px;object-fit:contain;border-radius:5px;display:none;background:#181a1b;border:1.5px solid #23272a;">
+                    <div style="flex:1;position:relative;">
+                        <input type="text" id="skinSearch" name="skinSearch" autocomplete="off" placeholder="e.g. AK-47 | Redline">
+                        <div id="skinSuggestions" class="suggestions"></div>
+                    </div>
+                </div>
+                <label for="targetFloat">Target wear:</label>
                 <select id="targetFloat" name="targetFloat">
                     <option value="0.0699999">Factory New (0.00 - 0.0699999…)</option>
                     <option value="0.1499999">Minimal Wear (0.07 - 0.1499999…)</option>
@@ -61,7 +61,7 @@
                 <input type="number" step="any" id="maxCap2" name="maxCap2" readonly>
                 <label for="minCap2">Min Cap:</label>
                 <input type="number" step="any" id="minCap2" name="minCap2" readonly>
-                <button type="button" id="calcMaxAvgBtn">Maximalen Avg Float berechnen</button>
+                <button type="button" id="calcMaxAvgBtn">Calculate Max Avg Float</button>
                 <div id="maxAvgResult"></div>
             </form>
         </div>

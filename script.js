@@ -141,9 +141,13 @@ skinSearch.addEventListener('input', function() {
         skinSuggestions.style.display = 'none';
         return;
     }
-    // Split Suchbegriff in Wörter, alle müssen im Namen vorkommen (für bessere Treffer wie Karambit Lore, Karambit Weißheit etc.)
+    // Split Suchbegriff in Wörter, alle müssen im Namen, Weapon oder Pattern vorkommen
     const words = val.split(/\s+/).filter(Boolean);
-    const matches = skins.filter(skin => words.every(w => skin.name.toLowerCase().includes(w))).slice(0, 20);
+    const matches = skins.filter(skin => {
+        // Prüfe name, weapon.name, pattern.name
+        const fields = [skin.name, skin.weapon?.name, skin.pattern?.name].filter(Boolean).map(s => s.toLowerCase());
+        return words.every(w => fields.some(f => f.includes(w)));
+    }).slice(0, 20);
     if (matches.length === 0) {
         skinSuggestions.style.display = 'none';
         return;

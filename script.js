@@ -200,6 +200,21 @@ function applyTranslations(lang) {
     document.getElementById('minCap2Label').textContent = t.minCap2Label;
     document.getElementById('calcMaxAvgBtn').textContent = t.calcMaxAvgBtn;
     document.getElementById('langSelect').value = lang;
+    
+    // Filter-Übersetzungen anwenden
+    applyFilterTranslations(lang);
+}
+
+// Filter-Übersetzungen anwenden
+function applyFilterTranslations(lang) {
+    const t = translations[lang];
+    document.getElementById('filterButton').textContent = t.filterButtonText;
+    document.getElementById('filterPopupTitle').textContent = t.filterPopupTitle;
+    document.getElementById('rarityFilterLabel').textContent = t.rarityFilterLabel;
+    document.getElementById('collectionFilterLabel').textContent = t.collectionFilterLabel;
+    document.getElementById('applyFilters').textContent = t.applyFiltersText;
+    document.getElementById('resetFilters').textContent = t.resetFiltersText;
+    document.getElementById('closeFilterPopup').textContent = t.closeFilterPopupText;
 }
 
 // Initialize
@@ -211,7 +226,16 @@ document.addEventListener('DOMContentLoaded', function() {
         initSkinSearch();
     });
     document.getElementById('langSelect').value = currentLang;
-    
+
     // Event-Listener für den Calculate-Max-Avg-Button
     document.getElementById('calcMaxAvgBtn').addEventListener('click', calculateMaxAvgFloat);
+    
+    // Filter-Popup Event-Listener
+    document.getElementById('filterButton').addEventListener('click', openFilterPopup);
+    document.getElementById('closeFilterPopup').addEventListener('click', closeFilterPopup);
+    document.getElementById('applyFilters').addEventListener('click', function() {
+        applyFilters();
+        closeFilterPopup();
+    });
+    document.getElementById('resetFilters').addEventListener('click', resetFilters);
 });

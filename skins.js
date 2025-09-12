@@ -32,7 +32,7 @@ function updateFilterOptions() {
     // Rarity-Filter extrahieren
     const rarities = new Set();
     skins.forEach(skin => {
-        if (skin.rarity) {
+        if (skin.rarity && skin.rarity.name) {
             rarities.add(skin.rarity.name);
         }
     });
@@ -40,8 +40,12 @@ function updateFilterOptions() {
     // Collection-Filter extrahieren
     const collections = new Set();
     skins.forEach(skin => {
-        if (skin.collection) {
-            collections.add(skin.collection.name);
+        if (skin.collections && skin.collections.length > 0) {
+            skin.collections.forEach(collection => {
+                if (collection.name) {
+                    collections.add(collection.name);
+                }
+            });
         }
     });
     
@@ -61,18 +65,21 @@ function updateRarityFilterOptions(rarities) {
         
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
-        checkbox.id = `rarity-${rarity}`;
+        checkbox.id = `rarity-${rarity.replace(/\s+/g, '-')}`;
         checkbox.value = rarity;
         checkbox.checked = filters.rarity.includes(rarity);
         
         const label = document.createElement('label');
-        label.htmlFor = `rarity-${rarity}`;
+        label.htmlFor = `rarity-${rarity.replace(/\s+/g, '-')}`;
         label.textContent = rarity;
         
-        // Rarity-Farbe anwenden (basierend auf bekannten Rarity-Farben)
-        const rarityColor = getRarityColor(rarity);
-        if (rarityColor) {
-            label.style.color = rarityColor;
+        // Rarity-Farbe aus den Skin-Daten verwenden
+        const skinWithRarity = skins.find(skin => skin.rarity && skin.rarity.name === rarity);
+        if (skinWithRarity && skinWithRarity.rarity && skinWithRarity.rarity.color) {
+            label.style.color = skinWithRarity.rarity.color;
+        } else {
+            // Fallback-Farbe falls keine Farbe in den Daten
+            label.style.color = getRarityColor(rarity);
         }
         
         div.appendChild(checkbox);
@@ -101,22 +108,28 @@ function updateCollectionFilterOptions(collections) {
         
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
-        checkbox.id = `collection-${collection}`;
+        checkbox.id = `collection-${collection.replace(/\s+/g, '-')}`;
         checkbox.value = collection;
         checkbox.checked = filters.collection.includes(collection);
         
         const label = document.createElement('label');
-        label.htmlFor = `collection-${collection}`;
+        label.htmlFor = `collection-${collection.replace(/\s+/g, '-')}`;
         label.textContent = collection;
         
         // Collection-Icon hinzufügen (falls verfügbar)
-        const collectionSkin = skins.find(skin => skin.collection && skin.collection.name === collection);
-        if (collectionSkin && collectionSkin.collection && collectionSkin.collection.image) {
-            const img = document.createElement('img');
-            img.src = collectionSkin.collection.image;
-            img.alt = collection;
-            img.className = 'collection-icon';
-            label.insertBefore(img, label.firstChild);
+        const skinWithCollection = skins.find(skin => 
+            skin.collections && skin.collections.some(c => c.name === collection && c.image)
+        );
+        
+        if (skinWithCollection) {
+            const collectionData = skinWithCollection.collections.find(c => c.name === collection);
+            if (collectionData && collectionData.image) {
+                const img = document.createElement('img');
+                img.src = collectionData.image;
+                img.alt = collection;
+                img.className = 'collection-icon';
+                label.insertBefore(img, label.firstChild);
+            }
         }
         
         div.appendChild(checkbox);
@@ -134,7 +147,7 @@ function updateCollectionFilterOptions(collections) {
     });
 }
 
-// Rarity-Farbe basierend auf Rarity-Name
+// Fallback Rarity-Farbe basierend auf Rarity-Name
 function getRarityColor(rarity) {
     const colorMap = {
         'Consumer Grade': '#b0c3d9',
@@ -167,14 +180,22 @@ function applyFilters() {
     // Collection-Filter anwenden
     if (filters.collection.length > 0) {
         filteredSkins = filteredSkins.filter(skin => 
-            skin.collection && filters.collection.includes(skin.collection.name)
+            skin.collections && skin.collections.some(collection => 
+                filters.collection.includes(collection.name)
+            )
         );
     }
     
     // Text-Suche anwenden
     if (words.length > 0) {
         filteredSkins = filteredSkins.filter(skin => {
-            const fields = [skin.name, skin.weapon?.name, skin.pattern?.name].filter(Boolean).map(s => s.toLowerCase());
+            const fields = [
+                skin.name, 
+                skin.weapon?.name, 
+                skin.pattern?.name,
+                ...(skin.collections ? skin.collections.map(c => c.name) : [])
+            ].filter(Boolean).map(s => s.toLowerCase());
+            
             return words.every(w => fields.some(f => f.includes(w)));
         });
     }
@@ -189,7 +210,8 @@ function displaySkinSuggestions(skinsToShow) {
     skinSuggestions.innerHTML = '';
     
     if (skinsToShow.length === 0) {
-        skinSuggestions.style.display = 'none';
+        skinSuggestions.innerHTML = `<div class="suggestion">${translations[currentLang].noResultsText}</div>`;
+        skinSuggestions.style.display = 'block';
         return;
     }
     
@@ -217,8 +239,17 @@ function displaySkinSuggestions(skinsToShow) {
             const raritySpan = document.createElement('span');
             raritySpan.className = 'skin-rarity';
             raritySpan.textContent = skin.rarity.name;
-            raritySpan.style.color = getRarityColor(skin.rarity.name);
+            raritySpan.style.color = skin.rarity.color || getRarityColor(skin.rarity.name);
             info.appendChild(raritySpan);
+        }
+        
+        // Collection anzeigen (falls vorhanden)
+        if (skin.collections && skin.collections.length > 0) {
+            const collectionSpan = document.createElement('span');
+            collectionSpan.className = 'skin-collection';
+            collectionSpan.textContent = skin.collections.map(c => c.name).join(', ');
+            collectionSpan.title = skin.collections.map(c => c.name).join(', ');
+            info.appendChild(collectionSpan);
         }
         
         const floatSpan = document.createElement('span');

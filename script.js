@@ -121,13 +121,13 @@ langSelect.addEventListener('change', function() {
     setLang(currentLang);
     applyTranslations(currentLang);
     fetchSkins(currentLang);
-    
+
     // Update all current floats to show correct =FN / etc. in new language
     for (let i = 1; i <= 10; i++) {
         const val = parseFloat(document.getElementById(`float${i}`).value);
         document.getElementById(`wearLabel${i}`).textContent = !isNaN(val) ? '= ' + getWearRatingShort(val) : '';
     }
-    
+
     // Update result texts if they exist
     if (document.getElementById('avgResult').textContent) {
         document.getElementById('calcAvgBtn').click();
@@ -142,12 +142,12 @@ function calculateMaxAvgFloat() {
     const targetFloat = parseFloat(document.getElementById('targetFloat').value);
     const maxCap2Val = parseFloat(document.getElementById('maxCap2').value);
     const minCap2Val = parseFloat(document.getElementById('minCap2').value);
-    
+
     if (isNaN(targetFloat) || isNaN(maxCap2Val) || isNaN(minCap2Val)) {
         document.getElementById('maxAvgResult').textContent = translations[currentLang].skinSelectErrorText;
         return;
     }
-    
+
     let wearName = '';
     // Compare exact values, do not round
     if (targetFloat === 0.0699999) wearName = translations[currentLang].wearFull[0];
@@ -155,7 +155,7 @@ function calculateMaxAvgFloat() {
     else if (targetFloat === 0.3799999) wearName = translations[currentLang].wearFull[2];
     else if (targetFloat === 0.4499999) wearName = translations[currentLang].wearFull[3];
     else if (targetFloat === 1.00) wearName = translations[currentLang].wearFull[4];
-    
+
     const maxAvg = (targetFloat - minCap2Val) / (maxCap2Val - minCap2Val);
     document.getElementById('maxAvgResult').textContent = `${translations[currentLang].maxAvgResultText} ${wearName} (${targetFloat}): ${maxAvg.toFixed(6)}`;
 }

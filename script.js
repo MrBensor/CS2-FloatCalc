@@ -232,3 +232,36 @@ document.getElementById('calcMaxAvgBtn').addEventListener('click', function() {
     const maxAvg = (targetFloat - minCap2Val) / (maxCap2Val - minCap2Val);
     document.getElementById('maxAvgResult').textContent = `Max Avg Float for ${wearName} (${targetFloat}): ${maxAvg}`;
 });
+
+// Sprache aus URL oder localStorage holen
+function getLang() {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get('lang') || localStorage.getItem('lang') || 'de';
+}
+
+function setLang(lang) {
+    localStorage.setItem('lang', lang);
+    // Seite neu laden mit Sprachparameter
+    const url = new URL(window.location);
+    url.searchParams.set('lang', lang);
+    window.location = url;
+}
+
+// Texte setzen
+function applyTranslations(lang) {
+    document.getElementById('title').textContent = translations[lang].title;
+    document.getElementById('tab1').textContent = translations[lang].tab1;
+    document.getElementById('tab2').textContent = translations[lang].tab2;
+    document.getElementById('skinSearch').placeholder = translations[lang].searchPlaceholder;
+    // ...weitere IDs
+}
+
+// Sprachumschalter-Event
+document.getElementById('langSelect').addEventListener('change', function() {
+    setLang(this.value);
+});
+
+// Beim Laden anwenden
+const lang = getLang();
+applyTranslations(lang);
+document.getElementById('langSelect').value = lang;

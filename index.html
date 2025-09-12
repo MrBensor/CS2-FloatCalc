@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CS2-Manager</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>CS2 Float Manager</h1>
+        <form id="floatForm">
+            <h2>1. Gib 10 Floats für CS2 Waffen ein</h2>
+            <div id="floatInputs">
+                <!-- Float Inputs werden hier per JS generiert -->
+            </div>
+            <button type="button" id="calcAvgBtn">Durchschnitt berechnen</button>
+            <div id="avgResult"></div>
+            <h2>2. Max/Min Cap eingeben</h2>
+            <label for="maxCap">Max Cap:</label>
+            <input type="number" step="any" id="maxCap" name="maxCap">
+            <label for="minCap">Min Cap:</label>
+            <input type="number" step="any" id="minCap" name="minCap">
+            <button type="button" id="calcFloatBtn">Endgültigen Float berechnen</button>
+            <div id="finalFloatResult"></div>
+        </form>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

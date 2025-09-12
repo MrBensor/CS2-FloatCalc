@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CS2 Manager</title>
+    <title id="titleTag">CS2 Manager</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
         <div class="header-row">
-            <h1>CS2 Float Manager</h1>
+            <h1 id="mainTitle"></h1>
             <div class="lang-switch">
-                <label for="langSelect">🌐</label>
+                <label for="langSelect" id="langLabel">🌐</label>
                 <select id="langSelect">
                     <option value="en">English</option>
                     <option value="de">Deutsch</option>
@@ -19,49 +19,49 @@
             </div>
         </div>
         <div class="tabs">
-            <button type="button" class="tab-btn active" id="tabFloat">Calculate Final Float</button>
-            <button type="button" class="tab-btn" id="tabAvg">Calculate Max Avg Float</button>
+            <button type="button" class="tab-btn active" id="tabFloat"></button>
+            <button type="button" class="tab-btn" id="tabAvg"></button>
         </div>
         <div id="tabContentFloat" class="tab-content">
             <form id="floatForm">
-                <h2>1. Enter 10 floats for CS2 weapons</h2>
+                <h2 id="floatStep1"></h2>
                 <div id="floatInputs"></div>
                 <div id="wearRatings"></div>
-                <button type="button" id="calcAvgBtn">Calculate average</button>
+                <button type="button" id="calcAvgBtn"></button>
                 <div id="avgResult"></div>
-                <h2>2. Enter Max/Min Cap</h2>
-                <label for="maxCap">Max Cap:</label>
+                <h2 id="floatStep2"></h2>
+                <label for="maxCap" id="maxCapLabel"></label>
                 <input type="number" step="any" id="maxCap" name="maxCap">
-                <label for="minCap">Min Cap:</label>
+                <label for="minCap" id="minCapLabel"></label>
                 <input type="number" step="any" id="minCap" name="minCap">
-                <button type="button" id="calcFloatBtn">Calculate final float</button>
+                <button type="button" id="calcFloatBtn"></button>
                 <div id="finalFloatResult"></div>
             </form>
         </div>
         <div id="tabContentAvg" class="tab-content" style="display:none">
             <form id="avgForm">
-                <h2>2. Calculate Max Avg Float</h2>
-                <label for="skinSearch">Search skin:</label>
+                <h2 id="avgStep2"></h2>
+                <label for="skinSearch" id="skinSearchLabel"></label>
                 <div style="position:relative; width:100%; display:flex; align-items:center; gap:12px;">
                     <img id="selectedSkinImg" src="" alt="" style="width:56px;height:38px;object-fit:contain;border-radius:5px;display:none;background:#181a1b;border:1.5px solid #23272a;">
                     <div style="flex:1;position:relative;">
-                        <input type="text" id="skinSearch" name="skinSearch" autocomplete="off" placeholder="e.g. AK-47 | Redline">
+                        <input type="text" id="skinSearch" name="skinSearch" autocomplete="off" placeholder="">
                         <div id="skinSuggestions" class="suggestions"></div>
                     </div>
                 </div>
-                <label for="targetFloat">Target wear:</label>
+                <label for="targetFloat" id="targetFloatLabel"></label>
                 <select id="targetFloat" name="targetFloat">
-                    <option value="0.0699999">Factory New (0.00 - 0.0699999…)</option>
-                    <option value="0.1499999">Minimal Wear (0.07 - 0.1499999…)</option>
-                    <option value="0.3799999">Field-Tested (0.15 - 0.3799999…)</option>
-                    <option value="0.4499999">Well-Worn (0.38 - 0.4499999…)</option>
-                    <option value="1.00">Battle-Scarred (0.45 - 1.00)</option>
+                    <option value="0.0699999" id="optFactoryNew"></option>
+                    <option value="0.1499999" id="optMinimalWear"></option>
+                    <option value="0.3799999" id="optFieldTested"></option>
+                    <option value="0.4499999" id="optWellWorn"></option>
+                    <option value="1.00" id="optBattleScarred"></option>
                 </select>
-                <label for="maxCap2">Max Cap:</label>
+                <label for="maxCap2" id="maxCap2Label"></label>
                 <input type="number" step="any" id="maxCap2" name="maxCap2" readonly>
-                <label for="minCap2">Min Cap:</label>
+                <label for="minCap2" id="minCap2Label"></label>
                 <input type="number" step="any" id="minCap2" name="minCap2" readonly>
-                <button type="button" id="calcMaxAvgBtn">Calculate Max Avg Float</button>
+                <button type="button" id="calcMaxAvgBtn"></button>
                 <div id="maxAvgResult"></div>
             </form>
         </div>

@@ -279,7 +279,7 @@ document.getElementById('langSelect').addEventListener('change', function() {
     setLang(this.value);
 });
 
-const lang = getLang();
+lang = getLang();
 applyTranslations(lang);
 
 // Create float input fields

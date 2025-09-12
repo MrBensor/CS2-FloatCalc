@@ -42,12 +42,13 @@
             <form id="avgForm">
                 <h2 id="avgStep2"></h2>
                 <label for="skinSearch" id="skinSearchLabel"></label>
-                <div style="position:relative; width:100%; display:flex; align-items:center; gap:12px;">
-                    <img id="selectedSkinImg" src="" alt="" style="width:56px;height:38px;object-fit:contain;border-radius:5px;display:none;background:#181a1b;border:1.5px solid #23272a;">
+                <div class="search-container">
+                    <img id="selectedSkinImg" src="" alt="">
                     <div style="flex:1;position:relative;">
-                        <input type="text" id="skinSearch" name="skinSearch" autocomplete="off" id="skinSearchPlaceholder">
+                        <input type="text" id="skinSearch" name="skinSearch" autocomplete="off" placeholder="">
                         <div id="skinSuggestions" class="suggestions"></div>
                     </div>
+                    <button type="button" id="filterButton" class="filter-button">Filter</button>
                 </div>
                 <label for="targetFloat" id="targetFloatLabel"></label>
                 <select id="targetFloat" name="targetFloat">
@@ -66,6 +67,28 @@
             </form>
         </div>
     </div>
+
+    <!-- Filter Popup -->
+    <div id="filterPopup" class="filter-popup">
+        <h3 id="filterTitle">Filter</h3>
+        
+        <div class="filter-section">
+            <h4 id="rarityFilterTitle">Rarity</h4>
+            <div id="rarityFilterOptions" class="filter-options"></div>
+        </div>
+        
+        <div class="filter-section">
+            <h4 id="collectionFilterTitle">Collections</h4>
+            <div id="collectionFilterOptions" class="filter-options"></div>
+        </div>
+        
+        <div class="filter-buttons">
+            <button id="resetFilters">Reset</button>
+            <button id="applyFilters">Apply</button>
+            <button id="closeFilterPopup">Close</button>
+        </div>
+    </div>
+
     <script src="lang.js"></script>
     <script src="script.js"></script>
     <script src="skins.js"></script>

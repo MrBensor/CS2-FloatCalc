@@ -48,7 +48,7 @@
                         <input type="text" id="skinSearch" name="skinSearch" autocomplete="off" placeholder="">
                         <div id="skinSuggestions" class="suggestions"></div>
                     </div>
-                    <button type="button" id="filterButton" class="filter-button">Filter</button>
+                    <button type="button" id="filterButton" class="filter-button"></button>
                 </div>
                 <label for="targetFloat" id="targetFloatLabel"></label>
                 <select id="targetFloat" name="targetFloat">
@@ -70,22 +70,22 @@
 
     <!-- Filter Popup -->
     <div id="filterPopup" class="filter-popup">
-        <h3 id="filterTitle">Filter</h3>
+        <h3 id="filterPopupTitle"></h3>
         
         <div class="filter-section">
-            <h4 id="rarityFilterTitle">Rarity</h4>
+            <h4 id="rarityFilterLabel"></h4>
             <div id="rarityFilterOptions" class="filter-options"></div>
         </div>
         
         <div class="filter-section">
-            <h4 id="collectionFilterTitle">Collections</h4>
+            <h4 id="collectionFilterLabel"></h4>
             <div id="collectionFilterOptions" class="filter-options"></div>
         </div>
         
         <div class="filter-buttons">
-            <button id="resetFilters">Reset</button>
-            <button id="applyFilters">Apply</button>
-            <button id="closeFilterPopup">Close</button>
+            <button id="resetFilters"></button>
+            <button id="applyFilters"></button>
+            <button id="closeFilterPopup"></button>
         </div>
     </div>
 

@@ -77,8 +77,6 @@ document.getElementById('calcAvgBtn').addEventListener('click', function() {
     }
 });
 
-// Endgültigen Float berechnen
-
 document.getElementById('calcFloatBtn').addEventListener('click', function() {
     const maxCap = parseFloat(document.getElementById('maxCap').value);
     const minCap = parseFloat(document.getElementById('minCap').value);
@@ -92,8 +90,9 @@ document.getElementById('calcFloatBtn').addEventListener('click', function() {
     }
     const resultFloat = (maxCap - minCap) * avgFloat + minCap;
     document.getElementById('finalFloatResult').textContent = `Endgültiger Float: ${resultFloat.toFixed(6)} (${getWearRating(resultFloat)})`;
+});
 
-// Funktion für Wear Rating (Langform) nachtragen, falls sie fehlt
+// Funktion für Wear Rating (Langform) global verfügbar machen
 function getWearRating(floatVal) {
     if (floatVal < 0.07) return 'Factory New';
     if (floatVal < 0.15) return 'Minimal Wear';
@@ -102,7 +101,6 @@ function getWearRating(floatVal) {
     if (floatVal <= 1.00) return 'Battle-Scarred';
     return '';
 }
-});
 
 
 // --- Maximalen Avg Float Tab: Skin Search, Autocomplete, Auto-Cap ---

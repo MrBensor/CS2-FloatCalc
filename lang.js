@@ -35,7 +35,13 @@ const translations = {
         skinErrorText: "Error loading skins",
         floatRangeText: "Float:",
         skinSelectErrorText: "Please select skin and wear!",
-        maxAvgResultText: "Max Avg Float for"
+        maxAvgResultText: "Max Avg Float for",
+        // Filter texts
+        filterTitle: "Filter Skins",
+        rarityFilterTitle: "Rarity",
+        collectionFilterTitle: "Collections",
+        noResultsText: "No skins found",
+        filterButton: "Filter"
     },
     de: {
         titleTag: "CS2 Float Manager",
@@ -73,6 +79,12 @@ const translations = {
         skinErrorText: "Fehler beim Laden der Skins",
         floatRangeText: "Float:",
         skinSelectErrorText: "Bitte Skin und Abnutzung auswählen!",
-        maxAvgResultText: "Max. Durchschnitt für"
+        maxAvgResultText: "Max. Durchschnitt für",
+        // Filter texts
+        filterTitle: "Skin-Filter",
+        rarityFilterTitle: "Seltenheit",
+        collectionFilterTitle: "Kollektionen",
+        noResultsText: "Keine Skins gefunden",
+        filterButton: "Filter"
     }
 };

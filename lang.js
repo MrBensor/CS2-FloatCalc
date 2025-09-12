@@ -22,7 +22,9 @@ const translations = {
         optBattleScarred: "Battle-Scarred (0.45 - 1.00)",
         maxCap2Label: "Max Cap:",
         minCap2Label: "Min Cap:",
-        calcMaxAvgBtn: "Calculate Max Avg Float"
+        calcMaxAvgBtn: "Calculate Max Avg Float",
+        wearShort: ['FN', 'MW', 'FT', 'WW', 'BS'], // Kurzlabels für Float-Input
+        wearFull: ['Factory New','Minimal Wear','Field-Tested','Well-Worn','Battle-Scarred'] // Langlabels
     },
     de: {
         titleTag: "CS2 Manager",
@@ -41,12 +43,14 @@ const translations = {
         skinSearchPlaceholder: "z.B. AK-47 | Redline",
         targetFloatLabel: "Ziel-Abnutzung:",
         optFactoryNew: "Fabrikneu (0.00 - 0.0699999…)",
-        optMinimalWear: "Minimaler Verschleiß (0.07 - 0.1499999…)",
-        optFieldTested: "Gebrauchsspuren (0.15 - 0.3799999…)",
-        optWellWorn: "Stark gebraucht (0.38 - 0.4499999…)",
+        optMinimalWear: "Minimale Gebrauchsspuren (0.07 - 0.1499999…)",
+        optFieldTested: "Einsatzerprobt (0.15 - 0.3799999…)",
+        optWellWorn: "Abgenutzt (0.38 - 0.4499999…)",
         optBattleScarred: "Kampfspuren (0.45 - 1.00)",
         maxCap2Label: "Max Cap:",
         minCap2Label: "Min Cap:",
-        calcMaxAvgBtn: "Max. Durchschnitt berechnen"
+        calcMaxAvgBtn: "Max. Durchschnitt berechnen",
+        wearShort: ['FN', 'MW', 'FT', 'WW', 'BS'], // Kurzlabels für Float-Input
+        wearFull: ['Fabrikneu','Minimale Gebrauchsspuren','Einsatzerprobt','Abgenutzt','Kampfspuren'] // Langlabels
     }
 };

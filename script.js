@@ -1,4 +1,4 @@
-// Tab-Logik
+// Tab logic
 const tabFloat = document.getElementById('tabFloat');
 const tabAvg = document.getElementById('tabAvg');
 const tabContentFloat = document.getElementById('tabContentFloat');
@@ -16,7 +16,7 @@ tabAvg.addEventListener('click', function() {
     tabContentAvg.style.display = 'block';
 });
 
-// Float-Input-Felder generieren und Wear Rating anzeigen
+// Generate float input fields and show wear rating
 const floatInputsDiv = document.getElementById('floatInputs');
 function getWearRatingShort(floatVal) {
     if (floatVal < 0.07) return 'FN';
@@ -26,7 +26,7 @@ function getWearRatingShort(floatVal) {
     if (floatVal <= 1.00) return 'BS';
     return '';
 }
-// Float-Inputs mit Wear-Label daneben generieren
+// Generate float inputs with wear label next to them
 for (let i = 1; i <= 10; i++) {
     const wrapper = document.createElement('div');
     wrapper.style.display = 'flex';
@@ -51,12 +51,12 @@ for (let i = 1; i <= 10; i++) {
     wrapper.appendChild(label);
     floatInputsDiv.appendChild(wrapper);
 }
-// Initial anzeigen
+// Show initially
 for (let i = 1; i <= 10; i++) {
     document.getElementById(`wearLabel${i}`).textContent = '';
 }
 
-// Durchschnitt berechnen
+// Calculate average
 let avgFloat = null;
 document.getElementById('calcAvgBtn').addEventListener('click', function() {
     let sum = 0;
@@ -70,9 +70,9 @@ document.getElementById('calcAvgBtn').addEventListener('click', function() {
     }
     if (count === 10) {
         avgFloat = sum / 10;
-        document.getElementById('avgResult').textContent = `Durchschnittlicher Float: ${avgFloat.toFixed(6)}`;
+    document.getElementById('avgResult').textContent = `Average float: ${avgFloat.toFixed(6)}`;
     } else {
-        document.getElementById('avgResult').textContent = 'Bitte alle 10 Floats eingeben!';
+    document.getElementById('avgResult').textContent = 'Please enter all 10 floats!';
         avgFloat = null;
     }
 });
@@ -81,28 +81,18 @@ document.getElementById('calcFloatBtn').addEventListener('click', function() {
     const maxCap = parseFloat(document.getElementById('maxCap').value);
     const minCap = parseFloat(document.getElementById('minCap').value);
     if (isNaN(maxCap) || isNaN(minCap)) {
-        document.getElementById('finalFloatResult').textContent = 'Bitte Max Cap und Min Cap eingeben!';
+    document.getElementById('finalFloatResult').textContent = 'Please enter Max Cap and Min Cap!';
         return;
     }
     if (avgFloat === null) {
-        document.getElementById('finalFloatResult').textContent = 'Bitte zuerst den Durchschnitt berechnen!';
+    document.getElementById('finalFloatResult').textContent = 'Please calculate the average first!';
         return;
     }
     const resultFloat = (maxCap - minCap) * avgFloat + minCap;
-    document.getElementById('finalFloatResult').textContent = `Endgültiger Float: ${resultFloat.toFixed(6)} (${getWearRating(resultFloat)})`;
+    document.getElementById('finalFloatResult').textContent = `Final float: ${resultFloat.toFixed(6)} (${getWearRating(resultFloat)})`;
 });
 
-// Funktion für Wear Rating (Langform) global verfügbar machen
-function getWearRating(floatVal) {
-    if (floatVal < 0.07) return 'Factory New';
-    if (floatVal < 0.15) return 'Minimal Wear';
-    if (floatVal < 0.38) return 'Field-Tested';
-    if (floatVal < 0.45) return 'Well-Worn';
-    if (floatVal <= 1.00) return 'Battle-Scarred';
-    return '';
-}
-
-// Korrigiere die Vergleichsoperatoren, sodass die Obergrenze nicht mehr inklusiv ist
+// Correct the comparison operators so that the upper limit is no longer inclusive
 function getWearRating(floatVal) {
     if (floatVal >= 0 && floatVal < 0.07) return 'Factory New';
     if (floatVal >= 0.07 && floatVal < 0.15) return 'Minimal Wear';
@@ -113,10 +103,10 @@ function getWearRating(floatVal) {
 }
 
 
-// --- Maximalen Avg Float Tab: Skin Search, Autocomplete, Auto-Cap ---
+// --- Max Avg Float Tab: Skin Search, Autocomplete, Auto-Cap ---
 
 
-// --- Maximalen Avg Float Tab: Skin Search, Autocomplete, Auto-Cap, Sprache ---
+// --- Max Avg Float Tab: Skin Search, Autocomplete, Auto-Cap, Language ---
 let skins = [];
 let lang = 'en';
 const skinSearch = document.getElementById('skinSearch');
@@ -136,7 +126,7 @@ function fetchSkins(language) {
             skinSuggestions.style.display = 'none';
         })
         .catch(() => {
-            skinSuggestions.innerHTML = '<div class="suggestion">Fehler beim Laden der Skins</div>';
+            skinSuggestions.innerHTML = '<div class="suggestion">Error loading skins</div>';
             skinSuggestions.style.display = 'block';
         });
 }
@@ -159,15 +149,15 @@ skinSearch.addEventListener('input', function() {
         skinSuggestions.style.display = 'none';
         return;
     }
-    // Split Suchbegriff in Wörter, alle müssen im Namen, Weapon oder Pattern vorkommen
+    // Split search term into words, all must be present in name, weapon or pattern
     const words = val.split(/\s+/).filter(Boolean);
         let matches = skins.filter(skin => {
-            // Prüfe name, weapon.name, pattern.name
+            // Check name, weapon.name, pattern.name
             const fields = [skin.name, skin.weapon?.name, skin.pattern?.name].filter(Boolean).map(s => s.toLowerCase());
             return words.every(w => fields.some(f => f.includes(w)));
         })
-        .sort((a, b) => a.name.localeCompare(b.name, 'de', {sensitivity: 'base'}))
-        .slice(0, 500); // Immer alphabetisch sortieren und auf 500 begrenzen
+    .sort((a, b) => a.name.localeCompare(b.name, 'en', {sensitivity: 'base'}))
+    .slice(0, 500); // Always sort alphabetically and limit to 500
     if (matches.length === 0) {
         skinSuggestions.style.display = 'none';
         return;
@@ -175,7 +165,7 @@ skinSearch.addEventListener('input', function() {
     matches.forEach(skin => {
         const div = document.createElement('div');
         div.className = 'suggestion';
-        // Bild, Name, Float Caps
+    // Image, name, float caps
         const img = document.createElement('img');
         img.src = skin.image;
         img.alt = skin.name;
@@ -196,7 +186,7 @@ skinSearch.addEventListener('input', function() {
             skinSearch.value = skin.name;
             maxCap2.value = skin.max_float;
             minCap2.value = skin.min_float;
-            // Bild links neben Suchfeld anzeigen
+            // Show image left of search field
             const selectedImg = document.getElementById('selectedSkinImg');
             selectedImg.src = skin.image;
             selectedImg.alt = skin.name;
@@ -211,7 +201,7 @@ skinSearch.addEventListener('input', function() {
 skinSearch.addEventListener('focus', function() {
     if (skinSuggestions.innerHTML) skinSuggestions.style.display = 'block';
 });
-// Bild zurücksetzen, wenn Suchfeld geleert wird
+// Reset image if search field is cleared
 skinSearch.addEventListener('input', function() {
     if (!skinSearch.value.trim()) {
         const selectedImg = document.getElementById('selectedSkinImg');
@@ -229,16 +219,16 @@ document.getElementById('calcMaxAvgBtn').addEventListener('click', function() {
     const maxCap2Val = parseFloat(maxCap2.value);
     const minCap2Val = parseFloat(minCap2.value);
     if (isNaN(targetFloat) || isNaN(maxCap2Val) || isNaN(minCap2Val)) {
-        document.getElementById('maxAvgResult').textContent = 'Bitte Skin und Wear auswählen!';
+    document.getElementById('maxAvgResult').textContent = 'Please select skin and wear!';
         return;
     }
     let wearName = '';
-    // Exakte Werte vergleichen, nicht gerundet
+    // Compare exact values, do not round
     if (targetFloat === 0.0699999) wearName = 'Factory New';
     else if (targetFloat === 0.1499999) wearName = 'Minimal Wear';
     else if (targetFloat === 0.3799999) wearName = 'Field-Tested';
     else if (targetFloat === 0.4499999) wearName = 'Well-Worn';
     else if (targetFloat === 1.00) wearName = 'Battle-Scarred';
     const maxAvg = (targetFloat - minCap2Val) / (maxCap2Val - minCap2Val);
-    document.getElementById('maxAvgResult').textContent = `Maximaler Avg Float für ${wearName} (${targetFloat}): ${maxAvg}`;
+    document.getElementById('maxAvgResult').textContent = `Max Avg Float for ${wearName} (${targetFloat}): ${maxAvg}`;
 });

@@ -18,37 +18,43 @@ tabAvg.addEventListener('click', function() {
 
 // Float-Input-Felder generieren und Wear Rating anzeigen
 const floatInputsDiv = document.getElementById('floatInputs');
-const wearRatingsDiv = document.getElementById('wearRatings');
-function getWearRating(floatVal) {
-    if (floatVal < 0.07) return 'Factory New (FN)';
-    if (floatVal < 0.15) return 'Minimal Wear (MW)';
-    if (floatVal < 0.38) return 'Field-Tested (FT)';
-    if (floatVal < 0.45) return 'Well-Worn (WW)';
-    if (floatVal <= 1.00) return 'Battle-Scarred (BS)';
+function getWearRatingShort(floatVal) {
+    if (floatVal < 0.07) return 'FN';
+    if (floatVal < 0.15) return 'MW';
+    if (floatVal < 0.38) return 'FT';
+    if (floatVal < 0.45) return 'WW';
+    if (floatVal <= 1.00) return 'BS';
     return '';
 }
-function updateWearRatings() {
-    let html = '';
-    for (let i = 1; i <= 10; i++) {
-        const val = parseFloat(document.getElementById(`float${i}`).value);
-        if (!isNaN(val)) {
-            html += `Float ${i}: <span>${getWearRating(val)}</span><br>`;
-        } else {
-            html += `Float ${i}: <span>-</span><br>`;
-        }
-    }
-    wearRatingsDiv.innerHTML = html;
-}
+// Float-Inputs mit Wear-Label daneben generieren
 for (let i = 1; i <= 10; i++) {
+    const wrapper = document.createElement('div');
+    wrapper.style.display = 'flex';
+    wrapper.style.alignItems = 'center';
+    wrapper.style.gap = '8px';
     const input = document.createElement('input');
     input.type = 'number';
     input.step = 'any';
     input.id = `float${i}`;
     input.placeholder = `Float ${i}`;
-    input.addEventListener('input', updateWearRatings);
-    floatInputsDiv.appendChild(input);
+    input.style.flex = '1';
+    const label = document.createElement('span');
+    label.id = `wearLabel${i}`;
+    label.style.minWidth = '38px';
+    label.style.fontWeight = 'bold';
+    label.style.color = '#43b581';
+    input.addEventListener('input', function() {
+        const val = parseFloat(input.value);
+        label.textContent = !isNaN(val) ? '= ' + getWearRatingShort(val) : '';
+    });
+    wrapper.appendChild(input);
+    wrapper.appendChild(label);
+    floatInputsDiv.appendChild(wrapper);
 }
-updateWearRatings();
+// Initial anzeigen
+for (let i = 1; i <= 10; i++) {
+    document.getElementById(`wearLabel${i}`).textContent = '';
+}
 
 // Durchschnitt berechnen
 let avgFloat = null;

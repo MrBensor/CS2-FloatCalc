@@ -3,17 +3,17 @@ const tabFloat = document.getElementById('tabFloat');
 const tabAvg = document.getElementById('tabAvg');
 const tabContentFloat = document.getElementById('tabContentFloat');
 const tabContentAvg = document.getElementById('tabContentAvg');
-tabFloat.addEventListener('click', function() {
-    tabFloat.classList.add('active');
-    tabAvg.classList.remove('active');
-    tabContentFloat.style.display = 'block';
-    tabContentAvg.style.display = 'none';
+document.getElementById('tabFloat').addEventListener('click', function() {
+    document.getElementById('tabContentFloat').style.display = '';
+    document.getElementById('tabContentAvg').style.display = 'none';
+    this.classList.add('active');
+    document.getElementById('tabAvg').classList.remove('active');
 });
-tabAvg.addEventListener('click', function() {
-    tabAvg.classList.add('active');
-    tabFloat.classList.remove('active');
-    tabContentFloat.style.display = 'none';
-    tabContentAvg.style.display = 'block';
+document.getElementById('tabAvg').addEventListener('click', function() {
+    document.getElementById('tabContentFloat').style.display = 'none';
+    document.getElementById('tabContentAvg').style.display = '';
+    this.classList.add('active');
+    document.getElementById('tabFloat').classList.remove('active');
 });
 
 // Generate float input fields and show wear rating
@@ -281,3 +281,19 @@ document.getElementById('langSelect').addEventListener('change', function() {
 
 const lang = getLang();
 applyTranslations(lang);
+
+// Create float input fields
+function createFloatInputs() {
+    const floatInputs = document.getElementById('floatInputs');
+    floatInputs.innerHTML = '';
+    for (let i = 0; i < 10; i++) {
+        const input = document.createElement('input');
+        input.type = 'number';
+        input.step = 'any';
+        input.id = 'float' + i;
+        input.name = 'float' + i;
+        input.placeholder = (i + 1) + '.';
+        floatInputs.appendChild(input);
+    }
+}
+createFloatInputs();

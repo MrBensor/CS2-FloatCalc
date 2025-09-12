@@ -36,12 +36,15 @@ const translations = {
         floatRangeText: "Float:",
         skinSelectErrorText: "Please select skin and wear!",
         maxAvgResultText: "Max Avg Float for",
-        // Filter texts
-        filterTitle: "Filter Skins",
-        rarityFilterTitle: "Rarity",
-        collectionFilterTitle: "Collections",
-        noResultsText: "No skins found",
-        filterButton: "Filter"
+        // Filter translations
+        filterButtonText: "Filter",
+        filterPopupTitle: "Filter Options",
+        rarityFilterLabel: "Rarity:",
+        collectionFilterLabel: "Collections:",
+        applyFiltersText: "Apply Filters",
+        resetFiltersText: "Reset Filters",
+        closeFilterPopupText: "Close",
+        noResultsText: "No results found"
     },
     de: {
         titleTag: "CS2 Float Manager",
@@ -80,11 +83,14 @@ const translations = {
         floatRangeText: "Float:",
         skinSelectErrorText: "Bitte Skin und Abnutzung auswählen!",
         maxAvgResultText: "Max. Durchschnitt für",
-        // Filter texts
-        filterTitle: "Skin-Filter",
-        rarityFilterTitle: "Seltenheit",
-        collectionFilterTitle: "Kollektionen",
-        noResultsText: "Keine Skins gefunden",
-        filterButton: "Filter"
+        // Filter translations
+        filterButtonText: "Filter",
+        filterPopupTitle: "Filter-Optionen",
+        rarityFilterLabel: "Seltenheit:",
+        collectionFilterLabel: "Kollektionen:",
+        applyFiltersText: "Filter anwenden",
+        resetFiltersText: "Filter zurücksetzen",
+        closeFilterPopupText: "Schließen",
+        noResultsText: "Keine Ergebnisse gefunden"
     }
 };

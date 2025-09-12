@@ -1,3 +1,8 @@
+// --- GLOBALE VARIABLEN ---
+let currentLang = 'en'; // Standardsprache ist Englisch
+let avgFloat = null;
+let skins = [];
+
 // --- TAB LOGIC ---
 const tabFloat = document.getElementById('tabFloat');
 const tabAvg = document.getElementById('tabAvg');
@@ -23,7 +28,7 @@ const floatInputsDiv = document.getElementById('floatInputs');
 
 // Nutze Übersetzungen aus lang.js
 function getWearRatingShort(floatVal) {
-    const wear = translations[langSelect.value].wearShort;
+    const wear = translations[currentLang].wearShort;
     if (floatVal < 0.07) return wear[0];
     if (floatVal < 0.15) return wear[1];
     if (floatVal < 0.38) return wear[2];
@@ -33,7 +38,7 @@ function getWearRatingShort(floatVal) {
 }
 
 function getWearRating(floatVal) {
-    const wear = translations[langSelect.value].wearFull;
+    const wear = translations[currentLang].wearFull;
     if (floatVal >= 0 && floatVal < 0.07) return wear[0];
     if (floatVal >= 0.07 && floatVal < 0.15) return wear[1];
     if (floatVal >= 0.15 && floatVal < 0.38) return wear[2];
@@ -55,7 +60,8 @@ function createFloatInputs() {
         input.type = 'number';
         input.step = 'any';
         input.id = `float${i}`;
-        input.placeholder = `Float ${i}`;
+        input.name = `float${i}`;
+        input.placeholder = `${i}.`;
         input.style.flex = '1';
 
         const label = document.createElement('span');
@@ -74,10 +80,8 @@ function createFloatInputs() {
         floatInputsDiv.appendChild(wrapper);
     }
 }
-createFloatInputs();
 
 // --- CALCULATE AVERAGE ---
-let avgFloat = null;
 document.getElementById('calcAvgBtn').addEventListener('click', () => {
     let sum = 0, count = 0;
     for (let i = 1; i <= 10; i++) {
@@ -86,14 +90,10 @@ document.getElementById('calcAvgBtn').addEventListener('click', () => {
     }
     if (count === 10) {
         avgFloat = sum / 10;
-        const currentLang = document.getElementById('langSelect').value;
-        const avgText = currentLang === 'de' ? 'Durchschnittlicher Float:' : 'Average float:';
-        document.getElementById('avgResult').textContent = `${avgText} ${avgFloat.toFixed(6)}`;
+        document.getElementById('avgResult').textContent = `${translations[currentLang].avgResultText} ${avgFloat.toFixed(6)}`;
     } else {
         avgFloat = null;
-        const currentLang = document.getElementById('langSelect').value;
-        const errorText = currentLang === 'de' ? 'Bitte alle 10 Floats eingeben!' : 'Please enter all 10 floats!';
-        document.getElementById('avgResult').textContent = errorText;
+        document.getElementById('avgResult').textContent = translations[currentLang].avgErrorText;
     }
 });
 
@@ -102,25 +102,18 @@ document.getElementById('calcFloatBtn').addEventListener('click', () => {
     const maxCap = parseFloat(document.getElementById('maxCap').value);
     const minCap = parseFloat(document.getElementById('minCap').value);
     if (isNaN(maxCap) || isNaN(minCap)) {
-        const currentLang = document.getElementById('langSelect').value;
-        const errorText = currentLang === 'de' ? 'Bitte Max Cap und Min Cap eingeben!' : 'Please enter Max Cap and Min Cap!';
-        document.getElementById('finalFloatResult').textContent = errorText;
+        document.getElementById('finalFloatResult').textContent = translations[currentLang].capErrorText;
         return;
     }
     if (avgFloat === null) {
-        const currentLang = document.getElementById('langSelect').value;
-        const errorText = currentLang === 'de' ? 'Bitte zuerst den Durchschnitt berechnen!' : 'Please calculate the average first!';
-        document.getElementById('finalFloatResult').textContent = errorText;
+        document.getElementById('finalFloatResult').textContent = translations[currentLang].avgFirstErrorText;
         return;
     }
     const resultFloat = (maxCap - minCap) * avgFloat + minCap;
-    const currentLang = document.getElementById('langSelect').value;
-    const finalText = currentLang === 'de' ? 'Finaler Float:' : 'Final float:';
-    document.getElementById('finalFloatResult').textContent = `${finalText} ${resultFloat.toFixed(6)} (${getWearRating(resultFloat)})`;
+    document.getElementById('finalFloatResult').textContent = `${translations[currentLang].finalResultText} ${resultFloat.toFixed(6)} (${getWearRating(resultFloat)})`;
 });
 
 // --- SKIN SEARCH / AUTOCOMPLETE / LANGUAGE ---
-let skins = [];
 const skinSearch = document.getElementById('skinSearch');
 const skinSuggestions = document.getElementById('skinSuggestions');
 const maxCap2 = document.getElementById('maxCap2');
@@ -128,7 +121,7 @@ const minCap2 = document.getElementById('minCap2');
 const langSelect = document.getElementById('langSelect');
 
 function fetchSkins(language) {
-    skinSuggestions.innerHTML = '<div class="suggestion">Loading skins...</div>';
+    skinSuggestions.innerHTML = `<div class="suggestion">${translations[currentLang].loadingSkinsText}</div>`;
     skinSuggestions.style.display = 'block';
     fetch(`https://raw.githubusercontent.com/ByMykel/CSGO-API/main/public/api/${language}/skins.json`)
         .then(res => res.json())
@@ -138,18 +131,17 @@ function fetchSkins(language) {
             skinSuggestions.style.display = 'none';
         })
         .catch(() => {
-            skinSuggestions.innerHTML = '<div class="suggestion">Error loading skins</div>';
+            skinSuggestions.innerHTML = `<div class="suggestion">${translations[currentLang].skinErrorText}</div>`;
             skinSuggestions.style.display = 'block';
         });
 }
 
-// Fix: language change updates both skins AND wear ratings
-langSelect.addEventListener('change', () => {
-    const lang = langSelect.value;
-    fetchSkins(lang);
-    
-    // Update all UI text based on selected language
-    applyTranslations(lang);
+// Sprache ändern
+langSelect.addEventListener('change', function() {
+    currentLang = this.value;
+    setLang(currentLang);
+    applyTranslations(currentLang);
+    fetchSkins(currentLang);
     
     // Update all current floats to show correct =FN / etc. in new language
     for (let i = 1; i <= 10; i++) {
@@ -165,8 +157,6 @@ langSelect.addEventListener('change', () => {
         document.getElementById('calcFloatBtn').click();
     }
 });
-
-fetchSkins(langSelect.value);
 
 skinSearch.addEventListener('input', function() {
     const val = skinSearch.value.trim().toLowerCase();
@@ -203,7 +193,7 @@ skinSearch.addEventListener('input', function() {
         name.textContent = skin.name;
         const floatSpan = document.createElement('span');
         floatSpan.className = 'skin-float';
-        floatSpan.textContent = `Float: ${skin.min_float} - ${skin.max_float}`;
+        floatSpan.textContent = `${translations[currentLang].floatRangeText} ${skin.min_float} - ${skin.max_float}`;
         info.appendChild(name);
         info.appendChild(floatSpan);
         div.appendChild(img);
@@ -245,29 +235,25 @@ document.getElementById('calcMaxAvgBtn').addEventListener('click', function() {
     const maxCap2Val = parseFloat(maxCap2.value);
     const minCap2Val = parseFloat(minCap2.value);
     if (isNaN(targetFloat) || isNaN(maxCap2Val) || isNaN(minCap2Val)) {
-        const currentLang = document.getElementById('langSelect').value;
-        const errorText = currentLang === 'de' ? 'Bitte Skin und Abnutzung auswählen!' : 'Please select skin and wear!';
-        document.getElementById('maxAvgResult').textContent = errorText;
+        document.getElementById('maxAvgResult').textContent = translations[currentLang].skinSelectErrorText;
         return;
     }
     let wearName = '';
     // Compare exact values, do not round
-    if (targetFloat === 0.0699999) wearName = translations[langSelect.value].wearFull[0];
-    else if (targetFloat === 0.1499999) wearName = translations[langSelect.value].wearFull[1];
-    else if (targetFloat === 0.3799999) wearName = translations[langSelect.value].wearFull[2];
-    else if (targetFloat === 0.4499999) wearName = translations[langSelect.value].wearFull[3];
-    else if (targetFloat === 1.00) wearName = translations[langSelect.value].wearFull[4];
+    if (targetFloat === 0.0699999) wearName = translations[currentLang].wearFull[0];
+    else if (targetFloat === 0.1499999) wearName = translations[currentLang].wearFull[1];
+    else if (targetFloat === 0.3799999) wearName = translations[currentLang].wearFull[2];
+    else if (targetFloat === 0.4499999) wearName = translations[currentLang].wearFull[3];
+    else if (targetFloat === 1.00) wearName = translations[currentLang].wearFull[4];
     
     const maxAvg = (targetFloat - minCap2Val) / (maxCap2Val - minCap2Val);
-    const currentLang = document.getElementById('langSelect').value;
-    const resultText = currentLang === 'de' ? 'Max. Durchschnitt für' : 'Max Avg Float for';
-    document.getElementById('maxAvgResult').textContent = `${resultText} ${wearName} (${targetFloat}): ${maxAvg.toFixed(6)}`;
+    document.getElementById('maxAvgResult').textContent = `${translations[currentLang].maxAvgResultText} ${wearName} (${targetFloat}): ${maxAvg.toFixed(6)}`;
 });
 
 // Sprache aus URL oder localStorage holen
 function getLang() {
     const urlParams = new URLSearchParams(window.location.search);
-    return urlParams.get('lang') || localStorage.getItem('lang') || 'de';
+    return urlParams.get('lang') || localStorage.getItem('lang') || 'en'; // Standard ist Englisch
 }
 
 function setLang(lang) {
@@ -278,7 +264,7 @@ function setLang(lang) {
 }
 
 function applyTranslations(lang) {
-    const t = translations[lang] || translations['en'];
+    const t = translations[lang];
     document.title = t.titleTag;
     document.getElementById('titleTag').textContent = t.titleTag;
     document.getElementById('mainTitle').textContent = t.mainTitle;
@@ -306,6 +292,11 @@ function applyTranslations(lang) {
     document.getElementById('langSelect').value = lang;
 }
 
-// Initialize with German language
-const lang = getLang();
-applyTranslations(lang);
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+    currentLang = getLang();
+    applyTranslations(currentLang);
+    createFloatInputs();
+    fetchSkins(currentLang);
+    document.getElementById('langSelect').value = currentLang;
+});

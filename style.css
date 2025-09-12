@@ -61,9 +61,9 @@
     color: #23272a;
 }
 #skinSuggestions .skin-img {
-    width: 64px;
-    height: 48px;
-    min-height: 48px;
+    width: 96px;
+    height: 72px;
+    min-height: 72px;
     object-fit: contain;
     border-radius: 5px;
     background: #181a1b;

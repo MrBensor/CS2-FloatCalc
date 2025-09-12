@@ -141,7 +141,9 @@ skinSearch.addEventListener('input', function() {
         skinSuggestions.style.display = 'none';
         return;
     }
-    const matches = skins.filter(skin => skin.name.toLowerCase().includes(val)).slice(0, 15);
+    // Split Suchbegriff in Wörter, alle müssen im Namen vorkommen (für bessere Treffer wie Karambit Lore, Karambit Weißheit etc.)
+    const words = val.split(/\s+/).filter(Boolean);
+    const matches = skins.filter(skin => words.every(w => skin.name.toLowerCase().includes(w))).slice(0, 20);
     if (matches.length === 0) {
         skinSuggestions.style.display = 'none';
         return;
@@ -170,6 +172,11 @@ skinSearch.addEventListener('input', function() {
             skinSearch.value = skin.name;
             maxCap2.value = skin.max_float;
             minCap2.value = skin.min_float;
+            // Bild links neben Suchfeld anzeigen
+            const selectedImg = document.getElementById('selectedSkinImg');
+            selectedImg.src = skin.image;
+            selectedImg.alt = skin.name;
+            selectedImg.style.display = 'block';
             skinSuggestions.style.display = 'none';
         });
         skinSuggestions.appendChild(div);
@@ -179,6 +186,15 @@ skinSearch.addEventListener('input', function() {
 
 skinSearch.addEventListener('focus', function() {
     if (skinSuggestions.innerHTML) skinSuggestions.style.display = 'block';
+});
+// Bild zurücksetzen, wenn Suchfeld geleert wird
+skinSearch.addEventListener('input', function() {
+    if (!skinSearch.value.trim()) {
+        const selectedImg = document.getElementById('selectedSkinImg');
+        selectedImg.src = '';
+        selectedImg.alt = '';
+        selectedImg.style.display = 'none';
+    }
 });
 skinSearch.addEventListener('blur', function() {
     setTimeout(() => skinSuggestions.style.display = 'none', 150);

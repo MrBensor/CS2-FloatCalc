@@ -42,10 +42,13 @@
             <form id="avgForm">
                 <h2>Maximalen Avg Float berechnen</h2>
                                 <label for="skinSearch">Skin suchen:</label>
-                                <div style="position:relative; width:100%;">
-                                    <input type="text" id="skinSearch" name="skinSearch" autocomplete="off" placeholder="z.B. AK-47 | Redline">
-                                    <div id="skinSuggestions" class="suggestions"></div>
-                                </div>
+                                                <div style="position:relative; width:100%; display:flex; align-items:center; gap:12px;">
+                                                    <img id="selectedSkinImg" src="" alt="" style="width:56px;height:38px;object-fit:contain;border-radius:5px;display:none;background:#181a1b;border:1.5px solid #23272a;">
+                                                    <div style="flex:1;position:relative;">
+                                                        <input type="text" id="skinSearch" name="skinSearch" autocomplete="off" placeholder="z.B. AK-47 | Redline">
+                                                        <div id="skinSuggestions" class="suggestions"></div>
+                                                    </div>
+                                                </div>
                 <label for="targetFloat">Ziel-Wear:</label>
                 <select id="targetFloat" name="targetFloat">
                     <option value="0.07">Factory New (0.00 - 0.07)</option>

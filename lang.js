@@ -24,7 +24,18 @@ const translations = {
         minCap2Label: "Min Cap:",
         calcMaxAvgBtn: "Calculate Max Avg Float",
         wearShort: ['FN', 'MW', 'FT', 'WW', 'BS'],
-        wearFull: ['Factory New','Minimal Wear','Field-Tested','Well-Worn','Battle-Scarred']
+        wearFull: ['Factory New','Minimal Wear','Field-Tested','Well-Worn','Battle-Scarred'],
+        // New text variables
+        avgResultText: "Average float:",
+        avgErrorText: "Please enter all 10 floats!",
+        capErrorText: "Please enter Max Cap and Min Cap!",
+        avgFirstErrorText: "Please calculate the average first!",
+        finalResultText: "Final float:",
+        loadingSkinsText: "Loading skins...",
+        skinErrorText: "Error loading skins",
+        floatRangeText: "Float:",
+        skinSelectErrorText: "Please select skin and wear!",
+        maxAvgResultText: "Max Avg Float for"
     },
     de: {
         titleTag: "CS2 Float Manager",
@@ -51,6 +62,17 @@ const translations = {
         minCap2Label: "Min Cap:",
         calcMaxAvgBtn: "Max. Durchschnitt berechnen",
         wearShort: ['FN', 'MW', 'FT', 'WW', 'BS'],
-        wearFull: ['Fabrikneu','Minimale Gebrauchsspuren','Einsatzerprobt','Abgenutzt','Kampfspuren']
+        wearFull: ['Fabrikneu','Minimale Gebrauchsspuren','Einsatzerprobt','Abgenutzt','Kampfspuren'],
+        // New text variables
+        avgResultText: "Durchschnittlicher Float:",
+        avgErrorText: "Bitte alle 10 Floats eingeben!",
+        capErrorText: "Bitte Max Cap und Min Cap eingeben!",
+        avgFirstErrorText: "Bitte zuerst den Durchschnitt berechnen!",
+        finalResultText: "Finaler Float:",
+        loadingSkinsText: "Lade Skins...",
+        skinErrorText: "Fehler beim Laden der Skins",
+        floatRangeText: "Float:",
+        skinSelectErrorText: "Bitte Skin und Abnutzung auswählen!",
+        maxAvgResultText: "Max. Durchschnitt für"
     }
 };

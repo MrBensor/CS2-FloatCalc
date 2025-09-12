@@ -61,12 +61,13 @@
     color: #23272a;
 }
 #skinSuggestions .skin-img {
-    width: 48px;
-    height: 32px;
+    width: 64px;
+    height: 48px;
+    min-height: 48px;
     object-fit: contain;
-    border-radius: 4px;
+    border-radius: 5px;
     background: #181a1b;
-    border: 1px solid #23272a;
+    border: 1.5px solid #23272a;
 }
 #skinSuggestions .skin-info {
     display: flex;
@@ -85,7 +86,8 @@
 }
 #skinSearch {
     width: 100%;
-    font-size: 1.15em;
+    height: 56px;
+    font-size: 1.18em;
     padding: 12px 14px;
     border-radius: 7px 7px 0 0;
     border: 2px solid #7289da;
@@ -162,8 +164,9 @@
     background: #181a1b;
     border-radius: 0 0 10px 10px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-    padding: 24px 18px 10px 18px;
+    padding: 32px 26px 18px 26px;
     margin-bottom: 20px;
+    font-size: 1.18em;
 }
 body {
     font-family: 'Segoe UI', Arial, sans-serif;
@@ -174,18 +177,18 @@ body {
     min-height: 100vh;
 }
 .container {
-    max-width: 540px;
+    max-width: 700px;
     margin: 40px auto;
     background: #23272a;
     border-radius: 16px;
     box-shadow: 0 4px 24px rgba(0,0,0,0.45);
-    padding: 32px 40px 20px 40px;
+    padding: 48px 56px 32px 56px;
     border: 1.5px solid #43b58133;
 }
 h1 {
     text-align: center;
     margin-bottom: 32px;
-    font-size: 2.1em;
+    font-size: 2.7em;
     color: #43b581;
     letter-spacing: 2px;
     text-shadow: 0 2px 8px #23272a;
@@ -198,7 +201,7 @@ h2 {
 }
 label {
     color: #b9bbbe;
-    font-size: 1em;
+    font-size: 1.13em;
     margin-top: 10px;
     display: block;
 }
@@ -210,12 +213,12 @@ label {
 }
 input[type="number"], select {
     width: 100%;
-    padding: 7px 10px;
+    padding: 12px 14px;
     border-radius: 5px;
     border: 1.5px solid #444;
     background: #2c2f33;
     color: #f1f1f1;
-    font-size: 1em;
+    font-size: 1.18em;
     margin-bottom: 8px;
     box-sizing: border-box;
     transition: border 0.2s;
@@ -248,4 +251,14 @@ button:hover {
     color: #43b581;
     font-size: 1.08em;
     text-shadow: 0 1px 4px #23272a;
+}
+#selectedSkinImg {
+    width: 72px;
+    height: 56px;
+    min-height: 56px;
+    object-fit: contain;
+    border-radius: 7px;
+    display: none;
+    background: #181a1b;
+    border: 2px solid #23272a;
 }

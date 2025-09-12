@@ -21,20 +21,19 @@ tabAvg.addEventListener('click', () => {
 // --- FLOAT INPUTS & WEAR LABELS ---
 const floatInputsDiv = document.getElementById('floatInputs');
 
+// Nutze Übersetzungen aus lang.js
 function getWearRatingShort(floatVal) {
-    if (floatVal < 0.07) return 'FN';
-    if (floatVal < 0.15) return 'MW';
-    if (floatVal < 0.38) return 'FT';
-    if (floatVal < 0.45) return 'WW';
-    if (floatVal <= 1.0) return 'BS';
+    const wear = translations[langSelect.value].wearShort;
+    if (floatVal < 0.07) return wear[0];
+    if (floatVal < 0.15) return wear[1];
+    if (floatVal < 0.38) return wear[2];
+    if (floatVal < 0.45) return wear[3];
+    if (floatVal <= 1.0) return wear[4];
     return '';
 }
 
-function getWearRating(floatVal, lang = 'en') {
-    const wearEn = ['Factory New', 'Minimal Wear', 'Field-Tested', 'Well-Worn', 'Battle-Scarred'];
-    const wearDe = ['Fabrikneu', 'Minimale Gebrauchsspuren', 'Einsatzerprobt', 'Abgenutzt', 'Kampfspuren'];
-    const wear = lang === 'de' ? wearDe : wearEn;
-
+function getWearRating(floatVal) {
+    const wear = translations[langSelect.value].wearFull;
     if (floatVal >= 0 && floatVal < 0.07) return wear[0];
     if (floatVal >= 0.07 && floatVal < 0.15) return wear[1];
     if (floatVal >= 0.15 && floatVal < 0.38) return wear[2];
@@ -43,7 +42,7 @@ function getWearRating(floatVal, lang = 'en') {
     return '';
 }
 
-// Generate float input fields
+// Generate float inputs with labels
 function createFloatInputs() {
     floatInputsDiv.innerHTML = '';
     for (let i = 1; i <= 10; i++) {
@@ -65,7 +64,6 @@ function createFloatInputs() {
         label.style.fontWeight = 'bold';
         label.style.color = '#43b581';
 
-        // Show =FN / =MW etc. immediately
         input.addEventListener('input', () => {
             const val = parseFloat(input.value);
             label.textContent = !isNaN(val) ? '= ' + getWearRatingShort(val) : '';
@@ -80,25 +78,23 @@ createFloatInputs();
 
 // --- CALCULATE AVERAGE ---
 let avgFloat = null;
-
 document.getElementById('calcAvgBtn').addEventListener('click', () => {
-    let sum = 0;
-    let count = 0;
+    let sum = 0, count = 0;
     for (let i = 1; i <= 10; i++) {
         const val = parseFloat(document.getElementById(`float${i}`).value);
-        if (!isNaN(val)) {
-            sum += val;
-            count++;
-        }
+        if (!isNaN(val)) { sum += val; count++; }
     }
     if (count === 10) {
         avgFloat = sum / 10;
         document.getElementById('avgResult').textContent = `Average float: ${avgFloat.toFixed(6)}`;
     } else {
-        document.getElementById('avgResult').textContent = 'Please enter all 10 floats!';
         avgFloat = null;
+        document.getElementById('avgResult').textContent = translations[langSelect.value].tabFloat === 'Finalen Float berechnen'
+            ? 'Bitte alle 10 Floats eingeben!'
+            : 'Please enter all 10 floats!';
     }
 });
+
 
 // --- MAX/MIN CAP CALCULATION ---
 document.getElementById('calcFloatBtn').addEventListener('click', () => {

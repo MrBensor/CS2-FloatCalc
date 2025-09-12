@@ -233,14 +233,12 @@ document.getElementById('calcMaxAvgBtn').addEventListener('click', function() {
         return;
     }
     let wearName = '';
-    switch(targetFloat) {
-        case 0.07: wearName = 'Factory New'; break;
-        case 0.15: wearName = 'Minimal Wear'; break;
-        case 0.38: wearName = 'Field-Tested'; break;
-        case 0.45: wearName = 'Well-Worn'; break;
-        case 1.00: wearName = 'Battle-Scarred'; break;
-        default: wearName = '';
-    }
+    // Exakte Werte vergleichen, nicht gerundet
+    if (targetFloat === 0.0699999) wearName = 'Factory New';
+    else if (targetFloat === 0.1499999) wearName = 'Minimal Wear';
+    else if (targetFloat === 0.3799999) wearName = 'Field-Tested';
+    else if (targetFloat === 0.4499999) wearName = 'Well-Worn';
+    else if (targetFloat === 1.00) wearName = 'Battle-Scarred';
     const maxAvg = (targetFloat - minCap2Val) / (maxCap2Val - minCap2Val);
-    document.getElementById('maxAvgResult').textContent = `Maximaler Avg Float für ${wearName} (${targetFloat.toFixed(2)}): ${maxAvg.toFixed(6)}`;
+    document.getElementById('maxAvgResult').textContent = `Maximaler Avg Float für ${wearName} (${targetFloat}): ${maxAvg}`;
 });

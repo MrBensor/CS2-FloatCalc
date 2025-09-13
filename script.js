@@ -1,333 +1,242 @@
-// filter.js - Komplette Filterlogik
-let filters = {
-    rarity: [],
-    collection: []
-};
+// --- GLOBALE VARIABLEN ---
+let currentLang = 'en'; // Standardsprache ist Englisch
+let avgFloat = null;
 
-// Rarity-Reihenfolge von häufig zu selten
-const rarityOrder = [
-    'Consumer Grade',
-    'Industrial Grade', 
-    'Mil-Spec Grade',
-    'Restricted',
-    'Classified',
-    'Covert',
-    'Contraband',
-    'Extraordinary'
-];
+// --- TAB LOGIC ---
+const tabFloat = document.getElementById('tabFloat');
+const tabAvg = document.getElementById('tabAvg');
+const tabContentFloat = document.getElementById('tabContentFloat');
+const tabContentAvg = document.getElementById('tabContentAvg');
 
-// Filter-Optionen aktualisieren
-function updateFilterOptions() {
-    // Rarity-Filter extrahieren - NUR die für Trade-Ups relevanten (erste 6)
-    const rarities = getAllRarities().filter(rarity => 
-        rarityOrder.includes(rarity) && rarityOrder.indexOf(rarity) < 6
-    );
+tabFloat.addEventListener('click', () => {
+tabContentFloat.style.display = '';
+tabContentAvg.style.display = 'none';
+tabFloat.classList.add('active');
+tabAvg.classList.remove('active');
+});
 
-    // Collection-Filter extrahieren
-    const collections = getAllCollections();
+tabAvg.addEventListener('click', () => {
+tabContentFloat.style.display = 'none';
+tabContentAvg.style.display = '';
+tabAvg.classList.add('active');
+tabFloat.classList.remove('active');
+});
 
-    // Filter-UI aktualisieren
-    updateRarityFilterOptions(rarities);
-    updateCollectionFilterOptions(collections);
+// --- FLOAT INPUTS & WEAR LABELS ---
+const floatInputsDiv = document.getElementById('floatInputs');
+
+// Nutze Übersetzungen aus lang.js
+function getWearRatingShort(floatVal) {
+const wear = translations[currentLang].wearShort;
+if (floatVal < 0.07) return wear[0];
+if (floatVal < 0.15) return wear[1];
+if (floatVal < 0.38) return wear[2];
+if (floatVal < 0.45) return wear[3];
+if (floatVal <= 1.0) return wear[4];
+return '';
 }
 
-// Rarity-Filter-Optionen aktualisieren (sortiert nach Seltenheit)
-function updateRarityFilterOptions(rarities) {
-    const container = document.getElementById('rarityFilterOptions');
-    container.innerHTML = '';
+function getWearRating(floatVal) {
+const wear = translations[currentLang].wearFull;
+if (floatVal >= 0 && floatVal < 0.07) return wear[0];
+if (floatVal >= 0.07 && floatVal < 0.15) return wear[1];
+if (floatVal >= 0.15 && floatVal < 0.38) return wear[2];
+if (floatVal >= 0.38 && floatVal < 0.45) return wear[3];
+if (floatVal >= 0.45 && floatVal <= 1.0) return wear[4];
+return '';
+}
 
-    // Sortiere Rarities nach der definierten Reihenfolge
-    const sortedRarities = rarities.sort((a, b) => {
-        return rarityOrder.indexOf(a) - rarityOrder.indexOf(b);
+// Generate float inputs with labels
+function createFloatInputs() {
+floatInputsDiv.innerHTML = '';
+for (let i = 1; i <= 10; i++) {
+const wrapper = document.createElement('div');
+wrapper.style.display = 'flex';
+wrapper.style.alignItems = 'center';
+wrapper.style.gap = '8px';
+
+const input = document.createElement('input');
+input.type = 'number';
+input.step = 'any';
+input.id = `float${i}`;
+input.name = `float${i}`;
+input.placeholder = `${i}.`;
+input.style.flex = '1';
+
+const label = document.createElement('span');
+label.id = `wearLabel${i}`;
+label.style.minWidth = '38px';
+label.style.fontWeight = 'bold';
+label.style.color = '#43b581';
+
+input.addEventListener('input', () => {
+const val = parseFloat(input.value);
+label.textContent = !isNaN(val) ? '= ' + getWearRatingShort(val) : '';
+});
+
+wrapper.appendChild(input);
+wrapper.appendChild(label);
+floatInputsDiv.appendChild(wrapper);
+}
+}
+
+// --- CALCULATE AVERAGE ---
+document.getElementById('calcAvgBtn').addEventListener('click', () => {
+let sum = 0, count = 0;
+for (let i = 1; i <= 10; i++) {
+const val = parseFloat(document.getElementById(`float${i}`).value);
+if (!isNaN(val)) { sum += val; count++; }
+}
+if (count === 10) {
+avgFloat = sum / 10;
+document.getElementById('avgResult').textContent = `${translations[currentLang].avgResultText} ${avgFloat.toFixed(6)}`;
+} else {
+avgFloat = null;
+document.getElementById('avgResult').textContent = translations[currentLang].avgErrorText;
+}
+});
+
+// --- MAX/MIN CAP CALCULATION ---
+document.getElementById('calcFloatBtn').addEventListener('click', () => {
+const maxCap = parseFloat(document.getElementById('maxCap').value);
+const minCap = parseFloat(document.getElementById('minCap').value);
+if (isNaN(maxCap) || isNaN(minCap)) {
+document.getElementById('finalFloatResult').textContent = translations[currentLang].capErrorText;
+return;
+}
+if (avgFloat === null) {
+document.getElementById('finalFloatResult').textContent = translations[currentLang].avgFirstErrorText;
+return;
+}
+const resultFloat = (maxCap - minCap) * avgFloat + minCap;
+document.getElementById('finalFloatResult').textContent = `${translations[currentLang].finalResultText} ${resultFloat.toFixed(6)} (${getWearRating(resultFloat)})`;
+});
+
+// --- LANGUAGE ---
+const langSelect = document.getElementById('langSelect');
+
+// Sprache ändern
+langSelect.addEventListener('change', function() {
+currentLang = this.value;
+setLang(currentLang);
+applyTranslations(currentLang);
+    fetchSkins(currentLang);
+    fetchSkins(currentLang).then(() => {
+        updateFilterOptions();
     });
 
-    sortedRarities.forEach(rarity => {
-        const div = document.createElement('div');
-        div.className = 'filter-option';
-
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.id = `rarity-${rarity.replace(/\s+/g, '-')}`;
-        checkbox.value = rarity;
-        checkbox.checked = filters.rarity.includes(rarity);
-
-        const label = document.createElement('label');
-        label.htmlFor = `rarity-${rarity.replace(/\s+/g, '-')}`;
-        label.textContent = rarity;
-
-        // Rarity-Farbe aus den Skin-Daten verwenden
-        const skinWithRarity = getSkinsByRarity(rarity)[0];
-        if (skinWithRarity && skinWithRarity.rarity && skinWithRarity.rarity.color) {
-            label.style.color = skinWithRarity.rarity.color;
-        } else {
-            // Fallback-Farbe falls keine Farbe in den Daten
-            label.style.color = getRarityColor(rarity);
-        }
-
-        div.appendChild(checkbox);
-        div.appendChild(label);
-        container.appendChild(div);
-
-        checkbox.addEventListener('change', () => {
-            if (checkbox.checked) {
-                filters.rarity.push(rarity);
-            } else {
-                filters.rarity = filters.rarity.filter(r => r !== rarity);
-            }
-            applyFilters();
-        });
-    });
+// Update all current floats to show correct =FN / etc. in new language
+for (let i = 1; i <= 10; i++) {
+const val = parseFloat(document.getElementById(`float${i}`).value);
+document.getElementById(`wearLabel${i}`).textContent = !isNaN(val) ? '= ' + getWearRatingShort(val) : '';
 }
 
-// Collection-Filter-Optionen aktualisieren
-function updateCollectionFilterOptions(collections) {
-    const container = document.getElementById('collectionFilterOptions');
-    container.innerHTML = '';
+// Update result texts if they exist
+if (document.getElementById('avgResult').textContent) {
+document.getElementById('calcAvgBtn').click();
+}
+if (document.getElementById('finalFloatResult').textContent) {
+document.getElementById('calcFloatBtn').click();
+}
+});
 
-    collections.sort().forEach(collection => {
-        const div = document.createElement('div');
-        div.className = 'filter-option';
+// Funktion zum Berechnen des maximalen Durchschnitts-Floats
+function calculateMaxAvgFloat() {
+const targetFloat = parseFloat(document.getElementById('targetFloat').value);
+const maxCap2Val = parseFloat(document.getElementById('maxCap2').value);
+const minCap2Val = parseFloat(document.getElementById('minCap2').value);
 
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.id = `collection-${collection.replace(/\s+/g, '-')}`;
-        checkbox.value = collection;
-        checkbox.checked = filters.collection.includes(collection);
-
-        const label = document.createElement('label');
-        label.htmlFor = `collection-${collection.replace(/\s+/g, '-')}`;
-        label.textContent = collection;
-
-        // Collection-Icon hinzufügen (falls verfügbar)
-        const skinWithCollection = getSkinsByCollection(collection)[0];
-        if (skinWithCollection) {
-            const collectionData = skinWithCollection.collections.find(c => c.name === collection);
-            if (collectionData && collectionData.image) {
-                const img = document.createElement('img');
-                img.src = collectionData.image;
-                img.alt = collection;
-                img.className = 'collection-icon';
-                label.insertBefore(img, label.firstChild);
-            }
-        }
-
-        div.appendChild(checkbox);
-        div.appendChild(label);
-        container.appendChild(div);
-
-        checkbox.addEventListener('change', () => {
-            if (checkbox.checked) {
-                filters.collection.push(collection);
-            } else {
-                filters.collection = filters.collection.filter(c => c !== collection);
-            }
-            applyFilters();
-        });
-    });
+if (isNaN(targetFloat) || isNaN(maxCap2Val) || isNaN(minCap2Val)) {
+document.getElementById('maxAvgResult').textContent = translations[currentLang].skinSelectErrorText;
+return;
 }
 
-// Hilfsfunktion: Skins nach Rarity filtern
-function getSkinsByRarity(rarityName) {
-    return skins.filter(skin => skin.rarity && skin.rarity.name === rarityName);
+let wearName = '';
+// Compare exact values, do not round
+if (targetFloat === 0.0699999) wearName = translations[currentLang].wearFull[0];
+else if (targetFloat === 0.1499999) wearName = translations[currentLang].wearFull[1];
+else if (targetFloat === 0.3799999) wearName = translations[currentLang].wearFull[2];
+else if (targetFloat === 0.4499999) wearName = translations[currentLang].wearFull[3];
+else if (targetFloat === 1.00) wearName = translations[currentLang].wearFull[4];
+
+const maxAvg = (targetFloat - minCap2Val) / (maxCap2Val - minCap2Val);
+document.getElementById('maxAvgResult').textContent = `${translations[currentLang].maxAvgResultText} ${wearName} (${targetFloat}): ${maxAvg.toFixed(6)}`;
 }
 
-// Hilfsfunktion: Skins nach Collection filtern
-function getSkinsByCollection(collectionName) {
-    return skins.filter(skin => 
-        skin.collections && skin.collections.some(c => c.name === collectionName)
-    );
+// Sprache aus URL oder localStorage holen
+function getLang() {
+const urlParams = new URLSearchParams(window.location.search);
+return urlParams.get('lang') || localStorage.getItem('lang') || 'en'; // Standard ist Englisch
 }
 
-// Fallback Rarity-Farbe basierend auf Rarity-Name
-function getRarityColor(rarity) {
-    const colorMap = {
-        'Consumer Grade': '#b0c3d9',
-        'Industrial Grade': '#5e98d9',
-        'Mil-Spec Grade': '#4b69ff',
-        'Restricted': '#8847ff',
-        'Classified': '#d32ce6',
-        'Covert': '#eb4b4b',
-        'Contraband': '#ffae39',
-        'Extraordinary': '#eb4b4b'
-    };
-
-    return colorMap[rarity] || '#ffffff';
+function setLang(lang) {
+localStorage.setItem('lang', lang);
+const url = new URL(window.location);
+url.searchParams.set('lang', lang);
+window.history.replaceState({}, '', url);
 }
 
-// Filter anwenden
-function applyFilters() {
-    const searchValue = document.getElementById('skinSearch').value.trim().toLowerCase();
-    const words = searchValue ? searchValue.split(/\s+/).filter(Boolean) : [];
+function applyTranslations(lang) {
+const t = translations[lang];
+document.title = t.titleTag;
+document.getElementById('titleTag').textContent = t.titleTag;
+document.getElementById('mainTitle').textContent = t.mainTitle;
+document.getElementById('langLabel').textContent = t.langLabel;
+document.getElementById('tabFloat').textContent = t.tabFloat;
+document.getElementById('tabAvg').textContent = t.tabAvg;
+document.getElementById('floatStep1').textContent = t.floatStep1;
+document.getElementById('calcAvgBtn').textContent = t.calcAvgBtn;
+document.getElementById('floatStep2').textContent = t.floatStep2;
+document.getElementById('maxCapLabel').textContent = t.maxCapLabel;
+document.getElementById('minCapLabel').textContent = t.minCapLabel;
+document.getElementById('calcFloatBtn').textContent = t.calcFloatBtn;
+document.getElementById('avgStep2').textContent = t.avgStep2;
+document.getElementById('skinSearchLabel').textContent = t.skinSearchLabel;
+document.getElementById('skinSearch').placeholder = t.skinSearchPlaceholder;
+document.getElementById('targetFloatLabel').textContent = t.targetFloatLabel;
+document.getElementById('optFactoryNew').textContent = t.optFactoryNew;
+document.getElementById('optMinimalWear').textContent = t.optMinimalWear;
+document.getElementById('optFieldTested').textContent = t.optFieldTested;
+document.getElementById('optWellWorn').textContent = t.optWellWorn;
+document.getElementById('optBattleScarred').textContent = t.optBattleScarred;
+document.getElementById('maxCap2Label').textContent = t.maxCap2Label;
+document.getElementById('minCap2Label').textContent = t.minCap2Label;
+document.getElementById('calcMaxAvgBtn').textContent = t.calcMaxAvgBtn;
+document.getElementById('langSelect').value = lang;
 
-    let filteredSkins = skins;
-
-    // Rarity-Filter anwenden
-    if (filters.rarity.length > 0) {
-        filteredSkins = filteredSkins.filter(skin => 
-            skin.rarity && filters.rarity.includes(skin.rarity.name)
-        );
-    }
-
-    // Collection-Filter anwenden
-    if (filters.collection.length > 0) {
-        filteredSkins = filteredSkins.filter(skin => 
-            skin.collections && skin.collections.some(collection => 
-                filters.collection.includes(collection.name)
-            )
-        );
-    }
-
-    // Text-Suche anwenden
-    if (words.length > 0) {
-        filteredSkins = filteredSkins.filter(skin => {
-            const fields = [
-                skin.name, 
-                skin.weapon?.name, 
-                skin.pattern?.name,
-                ...(skin.collections ? skin.collections.map(c => c.name) : [])
-            ].filter(Boolean).map(s => s.toLowerCase());
-
-            return words.every(w => fields.some(f => f.includes(w)));
-        });
-    }
-
-    // Ergebnisse anzeigen
-    displaySkinSuggestions(filteredSkins);
+// Filter-Übersetzungen anwenden
+applyFilterTranslations(lang);
 }
 
-// Skin-Vorschläge anzeigen
-function displaySkinSuggestions(skinsToShow) {
-    const skinSuggestions = document.getElementById('skinSuggestions');
-    skinSuggestions.innerHTML = '';
-
-    if (skinsToShow.length === 0) {
-        skinSuggestions.innerHTML = `<div class="suggestion">${translations[currentLang].noResultsText}</div>`;
-        skinSuggestions.style.display = 'block';
-        return;
-    }
-
-    const limitedSkins = skinsToShow.slice(0, 500);
-
-    limitedSkins.forEach(skin => {
-        const div = document.createElement('div');
-        div.className = 'suggestion';
-
-        // Image, name, float caps
-        const img = document.createElement('img');
-        img.src = skin.image;
-        img.alt = skin.name;
-        img.className = 'skin-img';
-
-        const info = document.createElement('div');
-        info.className = 'skin-info';
-
-        const name = document.createElement('span');
-        name.className = 'skin-name';
-        name.textContent = skin.name;
-
-        // Rarity mit Farbe anzeigen
-        if (skin.rarity) {
-            const raritySpan = document.createElement('span');
-            raritySpan.className = 'skin-rarity';
-            raritySpan.textContent = skin.rarity.name;
-            raritySpan.style.color = skin.rarity.color || getRarityColor(skin.rarity.name);
-            info.appendChild(raritySpan);
-        }
-
-        // Collection anzeigen (falls vorhanden)
-        if (skin.collections && skin.collections.length > 0) {
-            const collectionSpan = document.createElement('span');
-            collectionSpan.className = 'skin-collection';
-            collectionSpan.textContent = skin.collections.map(c => c.name).join(', ');
-            collectionSpan.title = skin.collections.map(c => c.name).join(', ');
-            info.appendChild(collectionSpan);
-        }
-
-        const floatSpan = document.createElement('span');
-        floatSpan.className = 'skin-float';
-        floatSpan.textContent = `${translations[currentLang].floatRangeText} ${skin.min_float} - ${skin.max_float}`;
-
-        info.appendChild(name);
-        info.appendChild(floatSpan);
-        div.appendChild(img);
-        div.appendChild(info);
-
-        div.addEventListener('click', function() {
-            document.getElementById('skinSearch').value = skin.name;
-            document.getElementById('maxCap2').value = skin.max_float;
-            document.getElementById('minCap2').value = skin.min_float;
-
-            // Show image left of search field
-            const selectedImg = document.getElementById('selectedSkinImg');
-            selectedImg.src = skin.image;
-            selectedImg.alt = skin.name;
-            selectedImg.style.display = 'block';
-            skinSuggestions.style.display = 'none';
-        });
-
-        skinSuggestions.appendChild(div);
-    });
-
-    skinSuggestions.style.display = 'block';
+// Filter-Übersetzungen anwenden
+function applyFilterTranslations(lang) {
+const t = translations[lang];
+document.getElementById('filterButton').textContent = t.filterButtonText;
+document.getElementById('filterPopupTitle').textContent = t.filterPopupTitle;
+document.getElementById('rarityFilterLabel').textContent = t.rarityFilterLabel;
+document.getElementById('collectionFilterLabel').textContent = t.collectionFilterLabel;
+document.getElementById('applyFilters').textContent = t.applyFiltersText;
+document.getElementById('resetFilters').textContent = t.resetFiltersText;
+document.getElementById('closeFilterPopup').textContent = t.closeFilterPopupText;
 }
 
-// Filter-Popup öffnen
-function openFilterPopup() {
-    document.getElementById('filterPopup').style.display = 'block';
-}
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+currentLang = getLang();
+applyTranslations(currentLang);
+createFloatInputs();
+    
+fetchSkins(currentLang).then(() => {
+initSkinSearch();
+        updateFilterOptions();
+});
+    
+document.getElementById('langSelect').value = currentLang;
 
-// Filter-Popup schließen
-function closeFilterPopup() {
-    document.getElementById('filterPopup').style.display = 'none';
-}
-
-// Filter zurücksetzen
-function resetFilters() {
-    filters = {
-        rarity: [],
-        collection: []
-    };
-
-    // Checkboxes zurücksetzen
-    document.querySelectorAll('#rarityFilterOptions input[type="checkbox"]').forEach(checkbox => {
-        checkbox.checked = false;
-    });
-
-    document.querySelectorAll('#collectionFilterOptions input[type="checkbox"]').forEach(checkbox => {
-        checkbox.checked = false;
-    });
-
-    applyFilters();
-}
-
-// Skin-Suche und Autovervollständigung initialisieren
-function initSkinSearch() {
-    const skinSearch = document.getElementById('skinSearch');
-    const skinSuggestions = document.getElementById('skinSuggestions');
-
-    skinSearch.addEventListener('input', function() {
-        applyFilters();
-    });
-
-    skinSearch.addEventListener('focus', function() {
-        if (skinSuggestions.innerHTML) skinSuggestions.style.display = 'block';
-    });
-
-    // Reset image if search field is cleared
-    skinSearch.addEventListener('input', function() {
-        if (!skinSearch.value.trim()) {
-            const selectedImg = document.getElementById('selectedSkinImg');
-            selectedImg.src = '';
-            selectedImg.alt = '';
-            selectedImg.style.display = 'none';
-        }
-    });
-
-    skinSearch.addEventListener('blur', function() {
-        setTimeout(() => skinSuggestions.style.display = 'none', 150);
-    });
-
-    // Filter-Button Event-Listener
+// Event-Listener für den Calculate-Max-Avg-Button
+document.getElementById('calcMaxAvgBtn').addEventListener('click', calculateMaxAvgFloat);
+    
+    // Filter-Popup Event-Listener
     document.getElementById('filterButton').addEventListener('click', openFilterPopup);
     document.getElementById('closeFilterPopup').addEventListener('click', closeFilterPopup);
     document.getElementById('applyFilters').addEventListener('click', function() {
@@ -335,4 +244,4 @@ function initSkinSearch() {
         closeFilterPopup();
     });
     document.getElementById('resetFilters').addEventListener('click', resetFilters);
-}
+});

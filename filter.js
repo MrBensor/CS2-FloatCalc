@@ -195,6 +195,82 @@ function applyFilters() {
     displaySkinSuggestions(filteredSkins);
 }
 
+// Skin-Vorschläge anzeigen
+function displaySkinSuggestions(skinsToShow) {
+    const skinSuggestions = document.getElementById('skinSuggestions');
+    skinSuggestions.innerHTML = '';
+
+    if (skinsToShow.length === 0) {
+        skinSuggestions.innerHTML = `<div class="suggestion">${translations[currentLang].noResultsText}</div>`;
+        skinSuggestions.style.display = 'block';
+        return;
+    }
+
+    const limitedSkins = skinsToShow.slice(0, 500);
+
+    limitedSkins.forEach(skin => {
+        const div = document.createElement('div');
+        div.className = 'suggestion';
+
+        // Image, name, float caps
+        const img = document.createElement('img');
+        img.src = skin.image;
+        img.alt = skin.name;
+        img.className = 'skin-img';
+
+        const info = document.createElement('div');
+        info.className = 'skin-info';
+
+        const name = document.createElement('span');
+        name.className = 'skin-name';
+        name.textContent = skin.name;
+
+        // Rarity mit Farbe anzeigen
+        if (skin.rarity) {
+            const raritySpan = document.createElement('span');
+            raritySpan.className = 'skin-rarity';
+            raritySpan.textContent = skin.rarity.name;
+            raritySpan.style.color = skin.rarity.color || getRarityColor(skin.rarity.name);
+            info.appendChild(raritySpan);
+        }
+
+        // Collection anzeigen (falls vorhanden)
+        if (skin.collections && skin.collections.length > 0) {
+            const collectionSpan = document.createElement('span');
+            collectionSpan.className = 'skin-collection';
+            collectionSpan.textContent = skin.collections.map(c => c.name).join(', ');
+            collectionSpan.title = skin.collections.map(c => c.name).join(', ');
+            info.appendChild(collectionSpan);
+        }
+
+        const floatSpan = document.createElement('span');
+        floatSpan.className = 'skin-float';
+        floatSpan.textContent = `${translations[currentLang].floatRangeText} ${skin.min_float} - ${skin.max_float}`;
+
+        info.appendChild(name);
+        info.appendChild(floatSpan);
+        div.appendChild(img);
+        div.appendChild(info);
+
+        div.addEventListener('click', function() {
+            document.getElementById('skinSearch').value = skin.name;
+            document.getElementById('maxCap2').value = skin.max_float;
+            document.getElementById('minCap2').value = skin.min_float;
+
+            // Show image left of search field
+            const selectedImg = document.getElementById('selectedSkinImg');
+            selectedImg.src = skin.image;
+            selectedImg.alt = skin.name;
+            selectedImg.style.display = 'block';
+            skinSuggestions.style.display = 'none';
+        });
+
+        skinSuggestions.appendChild(div);
+    });
+
+    skinSuggestions.style.display = 'block';
+}
+
 // Filter-Popup öffnen
 function openFilterPopup() {
     document.getElementById('filterPopup').style.display = 'block';

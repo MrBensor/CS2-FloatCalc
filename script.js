@@ -120,7 +120,9 @@ langSelect.addEventListener('change', function() {
     currentLang = this.value;
     setLang(currentLang);
     applyTranslations(currentLang);
-    fetchSkins(currentLang);
+    fetchSkins(currentLang).then(() => {
+        updateFilterOptions();
+    });
 
     // Update all current floats to show correct =FN / etc. in new language
     for (let i = 1; i <= 10; i++) {
@@ -222,20 +224,14 @@ document.addEventListener('DOMContentLoaded', function() {
     currentLang = getLang();
     applyTranslations(currentLang);
     createFloatInputs();
+    
     fetchSkins(currentLang).then(() => {
         initSkinSearch();
+        updateFilterOptions();
     });
+    
     document.getElementById('langSelect').value = currentLang;
 
     // Event-Listener für den Calculate-Max-Avg-Button
     document.getElementById('calcMaxAvgBtn').addEventListener('click', calculateMaxAvgFloat);
-    
-    // Filter-Popup Event-Listener
-    document.getElementById('filterButton').addEventListener('click', openFilterPopup);
-    document.getElementById('closeFilterPopup').addEventListener('click', closeFilterPopup);
-    document.getElementById('applyFilters').addEventListener('click', function() {
-        applyFilters();
-        closeFilterPopup();
-    });
-    document.getElementById('resetFilters').addEventListener('click', resetFilters);
 });

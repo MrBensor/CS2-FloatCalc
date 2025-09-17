@@ -1,0 +1,35 @@
+name: Update LOC Badges
+
+on: [push, workflow_dispatch]
+
+jobs:
+  update-badges:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Install cloc
+      run: sudo apt-get install -y cloc
+      
+    - name: Count lines
+      run: |
+        cloc --json --exclude-dir=node_modules,dist . > cloc.json
+        echo "LINES=$(jq '.SUM.code' cloc.json)" >> $GITHUB_ENV
+        echo "JS=$(jq '.JavaScript.code' cloc.json)" >> $GITHUB_ENV
+        echo "CSS=$(jq '.CSS.code' cloc.json)" >> $GITHUB_ENV
+        echo "HTML=$(jq '.HTML.code' cloc.json)" >> $GITHUB_ENV
+        
+    - name: Update README
+      run: |
+        sed -i "s/Total-.*_Lines/Total-$LINES_Lines/g" README.md
+        sed -i "s/JavaScript-.*_Lines/JavaScript-$JS_Lines/g" README.md
+        sed -i "s/CSS-.*_Lines/CSS-$CSS_Lines/g" README.md
+        sed -i "s/HTML-.*_Lines/HTML-$HTML_Lines/g" README.md
+        
+    - name: Commit changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add README.md
+        git commit -m "Update LOC badges" || exit 0
+        git push

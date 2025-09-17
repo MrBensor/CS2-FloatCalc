@@ -4,7 +4,7 @@ https://mrbensor.github.io/CS2-FloatCalc/
 
 
 
-![Total Lines](https://img.shields.io/github/languages/code-size/mrbensor/CS2-FloatCalc?label=Total%20Code)
-![JavaScript](https://img.shields.io/badge/JavaScript-📏%20dynamic-yellow?logo=javascript)
-![CSS](https://img.shields.io/badge/CSS-📏%20dynamic-blue?logo=css3)
-![HTML](https://img.shields.io/badge/HTML-📏%20dynamic-orange?logo=html5)
+![Total Lines](https://img.shields.io/badge/Total-0_Lines-blue)
+![JavaScript](https://img.shields.io/badge/JavaScript-0_Lines-yellow) 
+![CSS](https://img.shields.io/badge/CSS-0_Lines-blue)
+![HTML](https://img.shields.io/badge/HTML-0_Lines-orange)

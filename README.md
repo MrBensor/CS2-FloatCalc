@@ -1,10 +1,9 @@
-# CS2-FloatCalc
-Float Calculator for CS2 Skins.
-https://mrbensor.github.io/CS2-FloatCalc/
+# CS2 Float Manager
 
+📊 **Code Statistics:**
+- **Total Lines:** 0
+- **JavaScript:** 0  
+- **CSS:** 0
+- **HTML:** 0
 
-
-![Total Lines](https://img.shields.io/badge/Total-0_Lines-blue)
-![JavaScript](https://img.shields.io/badge/JavaScript-0_Lines-yellow) 
-![CSS](https://img.shields.io/badge/CSS-0_Lines-blue)
-![HTML](https://img.shields.io/badge/HTML-0_Lines-orange)
+Eine Desktop-App für CS2 Float-Berechnungen...

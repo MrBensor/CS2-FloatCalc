@@ -1,7 +1,7 @@
 const translations = {
     en: {
-        titleTag: "CS2 Float Manager",
-        mainTitle: "CS2 Float Manager",
+        titleTag: "CS2 Float Calculator",
+        mainTitle: "CS2 Float Calculator",
         langLabel: "🌐",
         tabFloat: "Calculate Final Float",
         tabAvg: "Calculate Max Avg Float",
@@ -47,8 +47,8 @@ const translations = {
         noResultsText: "No results found"
     },
     de: {
-        titleTag: "CS2 Float Manager",
-        mainTitle: "CS2 Float Manager",
+        titleTag: "CS2 Float Calculator",
+        mainTitle: "CS2 Float Calculator",
         langLabel: "🌐",
         tabFloat: "Finalen Float berechnen",
         tabAvg: "Max. Durchschnitt berechnen",

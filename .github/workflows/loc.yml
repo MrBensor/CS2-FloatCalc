@@ -1,0 +1,23 @@
+name: Lines of Code Counter
+
+on:
+  push:
+    branches: [ main, master ]
+  schedule:
+    - cron: '0 0 * * 0' # Einmal pro Woche
+
+jobs:
+  count-loc:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Count lines of code
+      uses: boyter/scc-action@v2.0.0
+      id: scc
+      
+    - name: Update README
+      uses: stefanzweifel/readme-statistics-action@v1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        lines_of_code: ${{ steps.scc.outputs.code }}

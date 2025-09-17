@@ -1,9 +1,6 @@
 # CS2 Float Manager
 
-📊 **Code Statistics:**
-- **Total Lines:** 0
-- **JavaScript:** 0  
-- **CSS:** 0
-- **HTML:** 0
-
-Eine Desktop-App für CS2 Float-Berechnungen...
+![Total Lines](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/DEIN_USER/DEIN_REPO/main/loc.json&query=$.total&label=Total%20Lines&color=blue)
+![JavaScript](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/DEIN_USER/DEIN_REPO/main/loc.json&query=$.javascript&label=JavaScript&color=yellow)
+![CSS](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/DEIN_USER/DEIN_REPO/main/loc.json&query=$.css&label=CSS&color=blue)
+![HTML](https://img.shields.io/badge/dynamic/json?url=https://raw.githubusercontent.com/DEIN_USER/DEIN_REPO/main/loc.json&query=$.html&label=HTML&color=orange)
